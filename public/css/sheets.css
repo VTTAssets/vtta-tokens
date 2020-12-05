@@ -1,0 +1,12 @@
+.vtta.ui.profile-button {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  background: none;
+}
+
+.vtta.ui.profile-button button {
+  max-width: none;
+}

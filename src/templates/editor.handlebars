@@ -1,0 +1,132 @@
+<form>
+  {{#*inline "activeLayerPartial"}}
+  <div class="pane activeLayer">
+    <div style="display: flex; flex-direction: row; align-items: center">
+      Blend:
+      <select disabled class="vtta ui small" name="change-blendmode">
+      </select>
+    </div>
+    <div style="display: flex; flex-direction: row; align-items: center">
+      Opacity:
+      <input disabled data-action="change-opacity" data-layer-id="{{layer.id}}" type="range" min="0" max="100" step="5"
+        value="100" style="width: 50px; margin: 0px 5px 0px 5px" />
+      100%
+    </div>
+  </div>
+  {{/inline}}
+
+
+  <!-- FOOTER -->
+  {{#*inline "footerPartial"}}
+  <div class="pane actions">
+    <input type="color" tabindex="-1" style="opacity: 0; visibility: hidden; position: absolute;" />
+    <span class="title">
+      Add
+    </span>
+    <div class="submenu inactive" data-name="active-layer">
+      <a class="button title" title="Active Layer actions">
+        <!-- <a data-type="action" data-action="open-submenu" data-target="add-layer" class="button" title="Add a layer..."> -->
+        <i class="fa fa-layer-group"></i>
+      </a>
+      <a data-type="action" data-action="create-mask" class="button" title="Create Mask from active Layer">
+        <i class="fa fa-mask"></i>
+      </a>
+
+    </div>
+
+    <div class="submenu" data-name="add-layer">
+      <a class="button title" title="Add a layer...">
+        <!-- <a data-type="action" data-action="open-submenu" data-target="add-layer" class="button" title="Add a layer..."> -->
+        <i class="fa fa-plus"></i>
+      </a>
+      <a data-type="action" data-action="add-layer-profile" class="button" title="Add the actor profile image">
+        <i class="fa fa-user"></i>
+      </a>
+      <a data-type="action" data-action="open-modal" data-target="add-layer-local" class="button"
+        title="Add an image from your local driver">
+        <i class="fa fa-hdd"></i>
+      </a>
+      <a data-type="action" data-action="open-modal" data-target="add-layer-url" class="button"
+        title="Add an image from an URL">
+        <i class="fa fa-globe"></i>
+      </a>
+      <a data-type="action" data-action="add-layer-fvtt" class="button" title="Add an image from your FVTT server">
+        <i class="fa fa-dice-d20"></i>
+      </a>
+      <a data-type="action" data-action="add-layer-tint" class="button" title="Add a color layer">
+        <i class="fas fa-fill-drip"></i>
+
+      </a>
+    </div>
+  </div>
+  {{/inline}}
+
+  <!-- LAYER -->
+  {{#*inline "layerPartial" }}
+  <div class="layer" data-id="{{this.id}}">
+    <div class="outline"></div>
+    <div class="meta">
+      <div class="title">
+        {{layer.title}}
+      </div>
+    </div>
+    <div class="actions">
+      {{#if layer.canMove}}
+      <div data-type="action" data-action="reset">
+        <i class="fa fa-redo icon inactive" title="Reset transformations"></i>
+      </div>
+      {{/if}}
+      <div data-type="action" data-action="{{#if layer.masked}}un{{/if}}mask">
+        <i class="fa fa-mask icon {{#if this.masked }}active{{/if}}"></i>
+      </div>
+
+      <div data-type="action" data-action="{{#if layer.visible}}hide{{else}}show{{/if}}">
+        <i class="fa fa-{{#if layer.visible}}eye{{else}}eye-slash{{/if}} icon"></i>
+      </div>
+      <div data-type="action" data-action="remove">
+        <i class="fa fa-trash-alt icon" style="color: rgb(251 117 0);"></i>
+      </div>
+      <div style="display: flex; flex-direction:column">
+        <div {{#if layer.canMoveUp}}data-type="action" data-action="moveUp" {{/if}}>
+          <i class="fa fa-angle-up" {{#unless layer.canMoveUp}}style="color: gray;" {{/unless}}></i>
+        </div>
+        <div {{#if layer.canMoveDown}}data-type="action" data-action="moveDown" {{/if}}>
+          <i class="fa fa-angle-down" {{#unless layer.canMoveDown}}style="color: gray;" {{/unless}}></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/inline}}
+
+  <!-- LAYERS -->
+  {{#*inline "layersPartial" }}
+  <div class="pane layers">
+    {{#each layers }}
+    {{> layerPartial layer=this }}
+    {{/each}}
+  </div>
+  {{/inline}}
+
+  <!-- MAIN -->
+  <div id="tokens">
+    <!-- Preview section -->
+    <section name="preview" class="preview">
+      <div class="preview transparency-pattern">
+        <canvas id="preview"></canvas>
+      </div>
+    </section>
+    <!-- Tools section: Generic actions and layers -->
+    <section name="tools" class="tools">
+      <!-- Active Layers -->
+      {{> activeLayerPartial }}
+
+      <!-- Layers -->
+      {{> layersPartial }}
+
+      <!-- Footer: Layer create etc.-->
+      {{> footerPartial }}
+    </section>
+
+  </div>
+  <section name="debug"></section>
+</form>

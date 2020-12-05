@@ -1,0 +1,362 @@
+#tokens {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px;
+  margin: 0px;
+  /* padding: 5px; */
+}
+
+#tokens > section {
+  flex-grow: 0;
+  flex-shrink: 1;
+  /* flex-basis: 420px; */
+  /* border: thin solid rgba(0, 0, 0, 0.404); */
+
+  box-shadow: 6px 3px 16px 0px rgba(0, 0, 0, 0.75);
+}
+
+/** 
+ * GENERAL STYLES
+ */
+.transparency-pattern {
+  background-image: linear-gradient(45deg, #c5c5c598 25%, transparent 25%),
+    linear-gradient(-45deg, #c5c5c598 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #c5c5c598 75%),
+    linear-gradient(-45deg, transparent 75%, #c5c5c598 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.transparency-pattern-sm {
+  background-image: linear-gradient(45deg, #c5c5c598 25%, transparent 25%),
+    linear-gradient(-45deg, #c5c5c598 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #c5c5c598 75%),
+    linear-gradient(-45deg, transparent 75%, #c5c5c598 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+.icon.active {
+  color: gold;
+}
+
+.icon.inactive {
+  color: rgb(97, 97, 97);
+}
+
+#vtta-tokens input[type="range"] {
+  width: 40px;
+}
+
+#tokens section .pane > .title {
+  flex-grow: 1;
+  font-weight: bold;
+  color: gold;
+}
+
+#tokens section.preview,
+#tokens section.tools {
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+/** 
+ * PREVIEW 
+ */
+
+#tokens section.preview {
+  box-shadow: none;
+}
+
+#tokens section.preview > div {
+  box-shadow: 6px 3px 16px 0px rgba(0, 0, 0, 0.75);
+}
+
+#tokens section[name="preview"] #preview {
+  width: 280px;
+  height: 280px;
+}
+
+#tokens section.preview canvas {
+  margin: auto;
+}
+
+#tokens .form-field {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#tokens .form-field .form-field-label {
+  font-weight: bold;
+  flex-basis: 20%;
+}
+
+#tokens .form-field .form-field-input input {
+  font-size: 1rem;
+}
+
+/**
+ * Toolbar 
+ */
+#tokens section.tools .pane.activeLayer {
+  background-color: #5f5f5f;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding: 0.5rem;
+}
+#tokens section.tools .pane.activeLayer > * {
+  margin-left: 0.5rem;
+}
+
+#tokens section.tools .pane.activeLayer button i {
+  line-height: 1.5rem;
+  font-size: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+#tokens section.tools .pane.actions {
+  background-color: #5f5f5f;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding: 0.5rem;
+}
+#tokens section.tools .pane.actions > * {
+  margin-left: 0.5rem;
+}
+
+#tokens section.tools .pane.actions button i {
+  line-height: 1.5rem;
+  font-size: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+#tokens section.tools .pane.actions .submenu {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  background-color: #7c7c7c;
+  border-radius: 6px;
+
+  padding: 0.25rem;
+}
+
+#tokens section.tools .pane.actions .submenu.inactive {
+  color: #525252;
+}
+
+#tokens section.tools .pane.actions .submenu input[type="text"] {
+  width: 120px;
+}
+
+#tokens section.tools .pane.actions .submenu.inactive .title {
+  color: rgba(255, 217, 0, 0.548);
+}
+
+#tokens section.tools .pane.actions .submenu .title {
+  color: gold;
+}
+
+#tokens section.tools .pane.actions .submenu > * {
+  margin-right: 0.5rem;
+}
+#tokens section.tools .pane.actions .submenu > *:last-child {
+  margin-right: 0;
+}
+
+/**
+ * MODALS
+ */
+#tokens .modal {
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0 0 0 / 85%);
+}
+
+#tokens .modal .content > div {
+  padding: 0.5rem;
+}
+
+#tokens .modal .content {
+  position: absolute;
+  z-index: 200;
+  width: 400px;
+  /* height: 400px; */
+  background-color: rgb(54, 54, 54);
+
+  color: rgb(245, 247, 232);
+
+  top: 50%;
+  left: 50%;
+  margin: -200px 0 0 -200px;
+  -webkit-box-shadow: 6px 3px 16px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 6px 3px 16px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 6px 3px 16px 0px rgba(0, 0, 0, 0.75);
+
+  border-radius: 5px;
+  padding-bottom: 0.5rem;
+}
+
+#tokens .modal .content .title {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  display: block;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: gold;
+  background-color: #5f5f5f;
+}
+
+/**
+ * Modal: Drag and Drop file upload local file
+ */
+#tokens .dropArea .box__input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: space-around;
+}
+
+#tokens .dropArea .box__input i.fas {
+  display: block;
+  font-size: 4rem;
+}
+
+#tokens .dropArea .box__input .box__file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+#tokens .dropArea .box__dragndrop,
+#tokens .dropArea .box__uploading,
+#tokens .dropArea .box__success,
+#tokens .dropArea .box__error {
+  display: none;
+}
+
+#tokens .dropArea .box__preview {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+#tokens .dropArea .box__preview img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  background-color: white;
+  margin: 5px;
+  padding: 4px;
+  border: thin solid gray;
+}
+
+#tokens .dropArea .box.has-advanced-upload {
+  /* background-color: white; */
+  outline: 2px dashed rgb(245, 247, 232);
+  outline-offset: -10px;
+  padding: 20px;
+}
+
+.box.is-dragover {
+  background-color: grey;
+}
+#tokens .dropArea .box.has-advanced-upload .box__dragndrop {
+  display: inline;
+}
+
+/**
+ * LAYERS 
+ */
+#tokens section.tools {
+  flex-grow: 1;
+}
+
+#tokens section.tools .pane.layers .layer {
+  display: flex;
+  flex-direction: row;
+  padding: 0.75rem;
+  background-color: rgb(43, 43, 43);
+  color: rgb(252, 248, 239);
+  align-items: center;
+}
+
+#tokens section.tools .pane.layers {
+  flex-grow: 1;
+}
+
+#tokens section.tools .pane.layers .layer:nth-child(odd) {
+  background-color: rgb(54, 54, 54);
+}
+
+#tokens section.tools .pane.layers .layer.active {
+  background-color: black;
+}
+
+#tokens section.tools .pane.layers div.outline {
+  padding: 2px;
+  width: 40px;
+  height: 40px;
+  border: thin solid #5f5f5f;
+}
+
+#tokens section.tools .pane.layers .layer > div {
+  flex-grow: 0;
+  margin-right: 0.5rem;
+}
+
+#tokens section.tools .pane.layers .layer .icon {
+  width: 20px;
+  text-align: center;
+}
+
+#tokens section.tools .pane.layers .layer > div:last-of-type {
+  margin-right: 0px;
+}
+
+#tokens section.tools .pane.layers .layer .meta {
+  flex-grow: 1;
+}
+
+#tokens section.tools .pane.layers .layer .actions {
+  display: flex;
+  flex-direction: row;
+}
+
+#tokens section.tools .pane.layers .layer .actions > div {
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#tokens section.tools .pane.layers .layer .actions > div > * {
+  margin-right: 5px;
+}
+#tokens section.tools .pane.layers .layer .actions > div:last-of-type {
+  margin-right: 0px;
+}

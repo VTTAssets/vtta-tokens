@@ -1,0 +1,18 @@
+{
+  "name": "vtta-tokens",
+  "title": "VTTA Tokens",
+  "description": "A token editor",
+  "author": "Sebastian Will <vttassets@gmail.com>",
+  "version": "1.0.0",
+  "minimumCoreVersion": "0.7.6",
+  "compatibleCoreVersion": "0.7.6",
+  "esmodules": ["src/index.js"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "styles": ["public/css/default.css", "public/css/sheets.css", "public/css/handle-file-local.css"]
+}

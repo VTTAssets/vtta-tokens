@@ -1,0 +1,28 @@
+<div>
+  <div class="dropArea">
+    <form class="box" method="post" action="" enctype="multipart/form-data">
+      <div class="box__input">
+        <input
+          type="file"
+          name="files[]"
+          id="file"
+          class="box__file"
+          data-multiple-caption="{count} files selected"
+          multiple=""
+        />
+        <br />
+        <label for="file">
+          <strong>
+            Choose a file
+          </strong>
+          <span class="box__dragndrop">
+            or drag it here
+          </span>
+          .
+        </label>
+        <div class="box__preview"></div>
+      </div>
+    </form>
+  </div>
+  <div class="error"></div>
+</div>

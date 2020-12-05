@@ -1,0 +1,90 @@
+<form>
+ {{#*inline "activeLayerPartial"}}
+ <div class="pane actions">
+    <div>
+  Blend Mode:
+  <select
+    name="change-blendmode"
+    disabled
+    data-layer-id="{{layer.id}}"
+  ></select>
+</div>
+<div>
+  <input
+    disabled
+    data-action="change-opacity"
+    data-layer-id="{{layer.id}}"
+    type="range"
+    min="0"
+    max="100"
+    step="5"
+    value="100"
+    style="width: 50px; margin: 0px 5px 0px 5px"
+  />
+  100%
+</div>
+ </div>
+ {{/inline}}
+
+
+
+ {{#*inline "actionsPartial"}}
+  <div class="pane actions">
+    <span class="title">
+      Active Layer
+    </span>
+    </div>
+  {{/inline}}
+
+  {{#*inline "layerPartial" }}
+  <div class="layer" data-id="{{this.id}}">
+    
+    <div class="status">
+      <div data-type="action" data-action="{{#if layer.locked}}un{{/if}}lock">
+        <i class="fa fa-{{#unless layer.locked}}un{{/unless}}lock icon"></i>
+      </div>
+    </div>
+    <div class="outline"></div>
+    <div class="meta">
+      <div class="title">
+        {{layer.title}}
+      </div>
+    </div>
+    <div class="actions">
+      <div data-type="action" data-action="{{#if layer.masked}}un{{/if}}mask">
+        <i class="fa fa-mask icon {{#if this.masked }}active{{/if}}"></i>
+      </div>
+      <div data-type="action" data-action="reset">
+        <i class="fa fa-redo icon inactive" title="Reset transformations"></i>
+      </div>
+      <div data-type="action" data-action="alpha">
+        <input type="range" min="0" max="100" step="5" value="{{this.opacity}}" style="width: 50px; margin: 0px 5px 0px 5px" />
+        90%
+      </div>
+    </div>
+  </div>
+  {{/inline}}
+
+  <!-- MAIN -->
+  <div id="tokens">
+    <!-- Preview section -->
+    <section name="preview" class="preview"><div class="preview transparency-pattern">
+      <canvas id="preview"></canvas>
+      </div>
+    </section>
+    <!-- Tools section: Generic actions and layers -->
+    <section name="tools" class="tools">
+      {{> activeLayerPartial }}
+      <!-- Generic actions -->
+      {{> actionsPartial }}
+      <!-- Layers -->
+      <div class="pane layers">
+        {{#each layers }}
+        {{> layerPartial layer=this }}
+        {{/each}}
+      </div>
+    </section>
+
+  </div>
+  <section name="debug"></section>
+</form>

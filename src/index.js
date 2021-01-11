@@ -9,21 +9,6 @@ Hooks.once("ready", async () => {
   try {
     const coreVersionNumber = await checkCoreAvailability();
     await setup();
-
-    const autoOpen = () => {
-      const actorName = "Curth";
-      const actor = game.actors.entities.find((a) => a.name === actorName);
-      if (!actor) return;
-      const sheet = new CONFIG.Actor.sheetClasses.character[
-        "dnd5e.ActorSheet5eCharacter"
-      ].cls(actor);
-      sheet.render(true);
-    };
-
-    setTimeout(() => {
-      console.log("Opening the actors");
-      autoOpen();
-    }, 1000);
   } catch (error) {
     console.log(error);
     const core = game.modules.get("vtta-core");

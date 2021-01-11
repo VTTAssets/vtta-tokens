@@ -1,10 +1,27 @@
 @use '../../../vtta-core/public/css/colors.scss' as *;
 
+header.window-header a.vtta.header-button {
+  display: flex;
+  align-items: center;
+
+  flex: none;
+  margin: 0 0 0 8px;
+
+  font-family: "Signika", sans-serif;
+  color: #f0f0e0;
+
+  img {
+    padding-right: 2px;
+    height: 20px;
+    border: none;
+  }
+}
+
 .vtta.ui.profile-button {
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  // justify-content: flex-end;
 
   background: none;
 

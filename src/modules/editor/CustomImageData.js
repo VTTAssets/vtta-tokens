@@ -1,8 +1,7 @@
-import Point from "./Point.js";
-import Pixel from "./Pixel.js";
 import Color from "./Color.js";
+import Pixel from "./Pixel.js";
 
-class ImageData {
+class CustomImageData {
   constructor(imageData) {
     this.data = imageData.data;
     this.width = imageData.width;
@@ -51,4 +50,4 @@ class ImageData {
   }
 }
 
-export default ImageData;
+export default CustomImageData;

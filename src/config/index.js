@@ -23,6 +23,16 @@ const config = {
     partials: {
       ADD_LAYER_LOCAL:
         "modules/vtta-tokens/src/templates/partials/add-layer-local.handlebars",
+      ADD_LAYER_REMOTE:
+        "modules/vtta-tokens/src/templates/partials/add-layer-remote.handlebars",
+    },
+  },
+  messaging: {
+    core: {
+      query: "vtta-core.query",
+      response: "vtta-core.available",
+      timeout: 100,
+      retries: 20,
     },
   },
 };

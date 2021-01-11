@@ -294,6 +294,7 @@
   flex-grow: 1;
 }
 
+/** LAYER */
 #tokens section.tools .pane.layers .layer {
   display: flex;
   flex-direction: row;
@@ -358,5 +359,73 @@
   margin-right: 5px;
 }
 #tokens section.tools .pane.layers .layer .actions > div:last-of-type {
+  margin-right: 0px;
+}
+
+/** MASK */
+#tokens section.tools .pane.masks .layer {
+  display: flex;
+  flex-direction: row;
+  padding: 0.75rem;
+  background-color: rgb(43, 43, 43);
+  color: rgb(252, 248, 239);
+  align-items: center;
+}
+
+#tokens section.tools .pane.masks {
+  flex-grow: 1;
+}
+
+#tokens section.tools .pane.masks .layer:nth-child(odd) {
+  background-color: rgb(54, 54, 54);
+}
+
+#tokens section.tools .pane.masks .layer.active {
+  background-color: black;
+}
+
+#tokens section.tools .pane.masks div.outline {
+  padding: 2px;
+  width: 40px;
+  height: 40px;
+  border: thin solid #5f5f5f;
+}
+
+#tokens section.tools .pane.masks .layer > div {
+  flex-grow: 0;
+  margin-right: 0.5rem;
+}
+
+#tokens section.tools .pane.masks .layer .icon {
+  width: 20px;
+  text-align: center;
+}
+
+#tokens section.tools .pane.masks .layer > div:last-of-type {
+  margin-right: 0px;
+}
+
+#tokens section.tools .pane.masks .layer .meta {
+  flex-grow: 1;
+}
+
+#tokens section.tools .pane.masks .layer .actions {
+  display: flex;
+  flex-direction: row;
+}
+
+#tokens section.tools .pane.masks .layer .actions > div {
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#tokens section.tools .pane.masks .layer .actions > div > * {
+  margin-right: 5px;
+}
+#tokens section.tools .pane.masks .layer .actions > div:last-of-type {
   margin-right: 0px;
 }

@@ -68,6 +68,50 @@ class DirectoryPicker extends FilePicker {
     };
   }
 
+  static infer(url) {
+    const getS3Config = () => {
+      const s3Endpoint =
+        game.data.files.s3 &&
+        game.data.files.s3 &&
+        game.data.files.s3.endpoint &&
+        game.data.files.s3.endpoint.href
+          ? game.data.files.s3.endpoint.href
+          : null;
+
+      return s3Endpoint;
+    };
+
+    const isS3URL = (url) => {
+      const config = getS3Config();
+      if (config === null) return false;
+
+      const compare = new URL(url, config.href);
+      return compare.host === config.hostname;
+    };
+
+    const isServerURL = (url) => {
+      const compare = new URL(url, location.origin);
+      return compare.host === location.host;
+    };
+
+    const parts = url.split("/");
+    const filename = parts[parts.length - 1];
+    if (isServerURL(url) || isS3URL(url)) {
+      const _infered = new FilePicker()._inferCurrentDirectory(url);
+      return {
+        activeSource: _infered[0],
+        bucket: null,
+        current: `${_infered[1]}/${filename}`,
+      };
+    } else {
+      return {
+        activeSource: null,
+        bucket: null,
+        current: url,
+      };
+    }
+  }
+
   // Adds a FilePicker-Simulator-Button next to the input fields
   static processHtml(html) {
     $(html)

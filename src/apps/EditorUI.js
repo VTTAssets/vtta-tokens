@@ -1,10 +1,10 @@
 import config from "../config/index.js";
-import TokenEditor from "../modules/TokenEditor/index.js";
-import Layer from "../modules/TokenEditor/Layer/Layer.js";
+import TokenEditor from "../modules/_TokenEditor/index.js";
+import Layer from "../modules/_TokenEditor/Layer/index.js";
 import logger from "../util/logger.js";
-import Color from "../modules/TokenEditor/Mask/Color.js";
+import Color from "../modules/_TokenEditor/Mask/Color.js";
 
-import CONSTANTS from "../modules/TokenEditor/constants.js";
+import CONSTANTS from "../modules/_TokenEditor/constants.js";
 
 import handleLocalFiles from "./EditorUI/handleLocalFiles.js";
 
@@ -44,58 +44,84 @@ class EditorUI extends FormApplication {
     });
   }
 
-  getData() {
-    // this is the first render of the editor
-    // we will retrieve both the avatar profile image and the default token frame
-    // and initialize the editor with that
-    return new Promise(async (resolve, reject) => {
-      if (this.editor.layers.length === 0) {
-        const defaultLayers = [];
+  async getData() {
+    if (this.editor.layers.length === 0) {
+      let defaultFrameUrl =
+        this.actor.data.type === "character"
+          ? game.settings.get(config.module.name, "defaultPCFrame")
+          : game.settings.get(config.module.name, "defaultNPCFrame");
+      defaultFrameUrl = window.vtta.settings.ImageFilePicker.getUrl(
+        defaultFrameUrl
+      );
 
-        // try to load the default border frame and add that one, too
-        try {
-          let defaultFrameUrl =
-            this.actor.data.type === "character"
-              ? game.settings.get(config.module.name, "defaultPCFrame")
-              : game.settings.get(config.module.name, "defaultNPCFrame");
-          defaultFrameUrl = window.vtta.settings.ImageFilePicker.getUrl(
-            defaultFrameUrl
-          );
-          defaultLayers.push(Layer.fromUrl(this.tokenSize, defaultFrameUrl));
-        } catch (error) {
-          logger.error("Could not get setting for default frame", {
-            actorType: actor.data.type,
-          });
-        }
+      const frameLayer = await Layer.fromUrl(this.tokenSize, defaultFrameUrl);
+      this.editor.addLayer(frameLayer);
+      //this.editor.createMaskFromLayer(frameLayer.id);
 
-        // Add the avatar image to the layers
-        defaultLayers.push(Layer.fromUrl(this.tokenSize, this.actor.data.img));
+      const profileLayer = await Layer.fromUrl(
+        this.tokenSize,
+        this.actor.data.img
+      );
+      this.editor.addLayer(profileLayer);
+      //this.editor.setLayerMask(profileLayer.id, 1);
+    }
 
-        Promise.allSettled(defaultLayers)
-          .then((layers) => {
-            return layers
-              .filter((layer) => layer.status && layer.status === "fulfilled")
-              .map((layer) => layer.value);
-          })
-          .then((layers) => {
-            // all layers that were able to load are loaded
-            layers.forEach((layer) => {
-              this.editor.addLayer(layer);
-            });
+    // // this is the first render of the editor
+    // // we will retrieve both the avatar profile image and the default token frame
+    // // and initialize the editor with that
+    // return new Promise(async (resolve, reject) => {
+    //   if (this.editor.layers.length === 0) {
+    //     const defaultLayers = [];
 
-            // mask the first layer
-            if (layers.length > 1) {
-              this.editor.setMaskLayer(layers[0].id);
-            }
-            // construct the first data
-            resolve(this.editor.getData());
-          });
-      } else {
-        const data = this.editor.getData();
-        console.log(data);
-        resolve(this.editor.getData());
-      }
-    });
+    //     // try to load the default border frame and add that one, too
+    //     try {
+    //       let defaultFrameUrl =
+    //         this.actor.data.type === "character"
+    //           ? game.settings.get(config.module.name, "defaultPCFrame")
+    //           : game.settings.get(config.module.name, "defaultNPCFrame");
+    //       defaultFrameUrl = window.vtta.settings.ImageFilePicker.getUrl(
+    //         defaultFrameUrl
+    //       );
+    //       defaultLayers.push(Layer.fromUrl(this.tokenSize, defaultFrameUrl));
+    //     } catch (error) {
+    //       logger.error("Could not get setting for default frame", {
+    //         actorType: actor.data.type,
+    //       });
+    //     }
+
+    //     // Add the avatar image to the layers
+    //     defaultLayers.push(Layer.fromUrl(this.tokenSize, this.actor.data.img));
+
+    //     Promise.allSettled(defaultLayers)
+    //       .then((layers) => {
+    //         return layers
+    //           .filter((layer) => layer.status && layer.status === "fulfilled")
+    //           .map((layer) => layer.value);
+    //       })
+    //       .then((layers) => {
+    //         // all layers that were able to load are loaded
+    //         layers.forEach((layer, index) => {
+    //           this.editor.addLayer(layer);
+    //           if (index === 0) {
+    //             this.editor.appendMask(layer.id);
+    //           }
+    //         });
+
+    //         // // mask the first layer
+    //         // if (layers.length > 1) {
+    //         //   this.editor.setMaskLayer(layers[0].id);
+    //         // }
+    //         // construct the first data
+    //         resolve(this.editor.getData());
+    //       });
+
+    return this.editor.getData();
+    //   } else {
+    //     const data = this.editor.getData();
+    //     console.log(data);
+    //     resolve(this.editor.getData());
+    //   }
+    // });
   }
 
   /**
@@ -205,13 +231,18 @@ class EditorUI extends FormApplication {
       var eventLocation = this.getEventLocation(this.preview, event);
 
       let scaleDirection = event.deltaY / 100;
-      let factor = 1 - scaleDirection * 0.05;
-      console.log("scalefactor: " + factor);
+      if (scaleDirection < 0) {
+        this.editor.zoomIn();
+      } else {
+        this.editor.zoomOut();
+      }
+      // let factor = 1 - scaleDirection * 0.05;
+      // console.log("scalefactor: " + factor);
 
-      // let dx = (eventLocation.x - this.activeLayer.position.x) * (factor - 1),
-      //   dy = (eventLocation.y - this.activeLayer.position.y) * (factor - 1);
+      // // let dx = (eventLocation.x - this.activeLayer.position.x) * (factor - 1),
+      // //   dy = (eventLocation.y - this.activeLayer.position.y) * (factor - 1);
 
-      this.editor.scale(factor);
+      // this.editor.scale(factor);
       // this.editor.translate(dx, dy);
       // this.activeLayer.redraw();
       // this.redraw();
@@ -386,6 +417,15 @@ class EditorUI extends FormApplication {
             this.editor.removeLock(layerId);
             break;
           case "mask":
+            // get the current mask id
+            const currentMaskId = this.editor.getLayerMaskId(layerId);
+            const currentMaskIndex = this.masks.findIndex(
+              (mask) => mask.id === currentMaskId
+            );
+            const nextMaskIndex =
+              currentMaskIndex === -1 ? 0 : currentMaskIndex + 1;
+            if (nextMaskIndex >= this.masks.length) nextMaskIndex = null;
+
             this.editor.applyMask(layerId);
             break;
           case "unmask":
@@ -491,10 +531,13 @@ class EditorUI extends FormApplication {
     // add the debug stuff
     $(html).find('section[name="debug"]').append("<h4>Layers</h4>");
     this.editor.layers.forEach((layer) => {
-      $(html).find('section[name="debug"]').append(layer.canvas);
+      $(html).find('section[name="debug"]').append(layer.canvas.raw);
     });
-    $(html).find('section[name="debug"]').append("<h4>Mask</h4>");
-    $(html).find('section[name="debug"]').append(this.editor.getMask());
+    $(html).find('section[name="debug"]').append("<h4>Masks</h4>");
+    // this.editor.masks.forEach((mask) => {
+    //   $(html).find('section[name="debug"]').append(mask.layer.canvas);
+    // });
+    // $(html).find('section[name="debug"]').append(this.editor.getMask());
 
     super.activateListeners(html);
   }

@@ -1,6 +1,7 @@
 import logger from "../../util/logger.js";
 import config from "../../config/index.js";
-import EditorUI from "../../apps/EditorUI.js";
+//import EditorUI from "../../apps/EditorUI.js";
+import App from "../editor/App.js";
 
 export default function () {
   let sheetNames = Object.values(CONFIG.Actor.sheetClasses)
@@ -21,8 +22,10 @@ export default function () {
           config.sheets.profileImageClasses.map((cls) => `img${cls}`).join(", ")
         )
         .each((index, image) => {
-          // create a new editor for this actor
-          const editorUI = new EditorUI({}, app.entity);
+          // // create a new editor for this actor
+          // const editorUI = new EditorUI({}, app.entity);
+
+          const editor = new App({}, app.entity);
 
           const profileButton = $(
             `<div class="vtta ui profile-button" style="top: ${
@@ -47,11 +50,14 @@ export default function () {
           });
 
           $(profileButton).on("click", (event) => {
-            if (event.target.tagName === "BUTTON") {
-              if (editorUI.rendered) {
-                editorUI.bringToTop();
+            if (
+              event.target.tagName === "BUTTON" ||
+              event.target.tagName === "I"
+            ) {
+              if (editor.rendered) {
+                editor.bringToTop();
               } else {
-                editorUI.render(true);
+                editor.render(true);
               }
             } else {
               $(image).click();

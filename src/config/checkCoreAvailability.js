@@ -1,4 +1,8 @@
+import config from "./index.js";
+import logger from "../util/logger.js";
+
 const checkCoreAvailability = () => {
+  logger.info(`Querying for vtta-core`);
   return new Promise((resolve, reject) => {
     // query only so many times as configured
     let coreAvailabilityTries = 0;
@@ -6,10 +10,14 @@ const checkCoreAvailability = () => {
     // setting up the interval
     const coreQueryInterval = setInterval(() => {
       coreAvailabilityTries++;
+      logger.info(
+        `Querying for vtta-core (${coreAvailabilityTries} attempt)...`
+      );
 
       // if we exceed the number of queries, we abort the setup
       if (coreAvailabilityTries > config.messaging.core.retries) {
         clearInterval(coreQueryInterval);
+        logger.warn(`No answer from vtta-core, aborting start.`);
         reject();
       }
 
@@ -19,6 +27,10 @@ const checkCoreAvailability = () => {
           config.messaging.core.response,
           availabilityQueryHandler
         );
+        // stop the interval
+        clearInterval(coreQueryInterval);
+
+        logger.info(`vtta-core v${event.detail.version} found.`);
         // resolve with the core version number
         resolve({
           version: event.detail.version,
@@ -43,28 +55,8 @@ const checkCoreAvailability = () => {
       }, config.messaging.core.timeout);
 
       // and repeat that for that given timeout
-    }, config.messaging.core.timeout);
+    }, config.messaging.core.timeout * 5);
   });
-};
-
-const prerequisites = () => {
-  const core = game.modules.get("vtta-core");
-  const coreMissing = core === undefined;
-  const coreDisabled = core && core.active === false;
-
-  if (coreMissing) {
-    ui.notifications.error(game.i18n.localize(`ERROR.CoreMissing`), {
-      permanent: true,
-    });
-  }
-
-  if (coreDisabled) {
-    ui.notifications.error(game.i18n.localize(`ERROR.CoreDisabled`), {
-      permanent: true,
-    });
-  }
-
-  return !(coreMissing || coreDisabled);
 };
 
 export default checkCoreAvailability;

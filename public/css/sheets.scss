@@ -1,0 +1,30 @@
+@use '../../../vtta-core/public/css/colors.scss' as *;
+
+.vtta.ui.profile-button {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  background: none;
+
+  button {
+    max-width: none;
+
+    background: $COLOR_BACKGROUND_ACCENT_3;
+    border: none;
+    color: $COLOR_FOREGROUND_DEFAULT;
+    box-shadow: $SHADOW_FAINT;
+  }
+
+  button:hover {
+    background-color: $COLOR_BACKGROUND_DEFAULT;
+    color: $COLOR_FOREGROUND_ACCENT_1;
+  }
+
+  button.active {
+    position: relative;
+    top: 1px;
+    box-shadow: $SHADOW_FAINT;
+  }
+}

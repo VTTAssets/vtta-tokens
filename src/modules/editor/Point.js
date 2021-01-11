@@ -1,10 +1,11 @@
-/**
- * Point Helper utility
- */
 class Point {
   constructor(x, y) {
-    this.x = Math.round(x);
-    this.y = Math.round(y);
+    this.x = x;
+    this.y = y;
+  }
+
+  delta(p) {
+    return new Point(p.x - this.x, p.y - this.y);
   }
 
   distance(point) {

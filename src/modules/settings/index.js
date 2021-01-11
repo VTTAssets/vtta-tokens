@@ -32,21 +32,12 @@ export default function () {
     },
     {
       // Auto-generation of Tokens
-      key: "automaticTokenGeneration",
-      type: Boolean,
-      default: true,
-      scope: "world",
-      config: false,
-      public: true,
-    },
-    {
-      // Auto-generation of Tokens
       key: "tokenSize",
       type: Number,
       min: 100,
-      max: 400,
+      max: 480,
       step: 20,
-      default: 280,
+      default: 240,
       scope: "world",
       config: false,
       public: true,
@@ -55,7 +46,7 @@ export default function () {
 
   // register all settings internally
   settings.forEach((setting, index) => {
-    logger.debug(`Registing setting`, setting.name, setting);
+    logger.debug(`Registering setting`, setting.name, setting);
     setting.order = index;
     game.settings.register(config.module.name, setting.key, setting);
   });
@@ -74,6 +65,8 @@ export default function () {
               label: game.i18n.localize(`SETTING.${setting.key}.label`),
               hint: game.i18n.localize(`SETTING.${setting.key}.hint`),
               value: game.settings.get(config.module.name, setting.key),
+              min: setting.min ? setting.min : undefined,
+              max: setting.max ? setting.max : undefined,
             })
           ),
       },

@@ -1,5 +1,5 @@
-import Mask from "./Mask.js";
 import Point from "./Point.js";
+import Mask from "./Mask.js";
 
 class Ray {
   constructor(start, end) {

@@ -1,17 +1,19 @@
+import CustomImageData from "./CustomImageData.js";
 import Point from "./Point.js";
 import Ray from "./Ray.js";
-import ImageData from "./ImageData.js";
 
 class Mask {
   static DEFAULT_SAMPLE_SIZE = 5;
   static MINIMUM_ALPHA = 255;
 
-  constructor(image) {
-    const data = Mask.processImage(image);
-    // the drawn image
-    this.canvas = data.canvas;
+  constructor(canvas) {
+    // const data =
+    //   // the drawn image
+    //   (this.canvas = canvas);
     // the pixel image data
-    this.imageData = data.imageData;
+    this.imageData = new CustomImageData(
+      canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height)
+    );
 
     this.width = this.imageData.width;
     this.height = this.imageData.height;
@@ -25,19 +27,6 @@ class Mask {
     this.rays = [];
 
     return this.create();
-  }
-
-  static processImage(image) {
-    const canvas = document.createElement("canvas");
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-    canvas.getContext("2d").drawImage(image, 0, 0);
-    return {
-      canvas,
-      imageData: new ImageData(
-        canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height)
-      ),
-    };
   }
 
   create() {
@@ -63,35 +52,34 @@ class Mask {
       max: distances[distances.length - 1],
     };
 
-    console.log(
-      `Distances - min: ${stats.min}, max: ${stats.max}, mean: ${stats.mean}`
-    );
-    const radius = stats.max;
-
-    context.beginPath();
-    context.fillStyle = "red";
-    context.arc(this.center.x, this.center.y, radius, 0, 2 * Math.PI, false);
-    context.fill();
-
-    context.beginPath();
     context.fillStyle = "black";
+    // totally opaque image, to be validates if doing it like this is consistent
+    if (stats.mean === 0 && stats.min === 0 && stats.max === 0) {
+      context.rect(0, 0, this.output.width, this.output.height);
+      context.fill();
+    } else {
+      const radius = stats.max;
 
-    outline.forEach((pixel, index) => {
-      if (index === 0) {
-        context.moveTo(pixel.x, pixel.y);
-      } else {
-        context.lineTo(pixel.x, pixel.y);
-      }
-    });
-    context.closePath();
-    context.fill();
+      context.beginPath();
+
+      context.arc(this.center.x, this.center.y, radius, 0, 2 * Math.PI, false);
+      context.fill();
+
+      context.beginPath();
+      context.fillStyle = "black";
+
+      outline.forEach((pixel, index) => {
+        if (index === 0) {
+          context.moveTo(pixel.x, pixel.y);
+        } else {
+          context.lineTo(pixel.x, pixel.y);
+        }
+      });
+      context.closePath();
+      context.fill();
+    }
 
     return this.output;
-    // return {
-    //   canvas: this.output,
-    //   center: this.center,
-    //   radius: radius,
-    // };
   }
 
   /**
@@ -146,7 +134,6 @@ class Mask {
             rays[index - i] !== undefined &&
             !rays[index - i].isAnalyzed()
           ) {
-            console.log("Analyzing missed index #" + (index - i));
             rays[index - i] = rays[index - i].analyze(this.imageData);
             i++;
           }

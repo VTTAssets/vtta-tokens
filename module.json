@@ -4,8 +4,8 @@
   "description": "A token editor",
   "author": "Sebastian Will <vttassets@gmail.com>",
   "version": "1.0.0",
-  "minimumCoreVersion": "0.7.6",
-  "compatibleCoreVersion": "0.7.6",
+  "minimumCoreVersion": "0.7.9",
+  "compatibleCoreVersion": "0.7.9",
   "esmodules": ["src/index.js"],
   "languages": [
     {
@@ -14,5 +14,10 @@
       "path": "lang/en.json"
     }
   ],
-  "styles": ["public/css/default.css", "public/css/sheets.css", "public/css/handle-file-local.css"]
+  "styles": [
+    "public/css/default.css",
+    "public/css/sheets.min.css",
+    "public/css/handle-file-local.css",
+    "public/css/editor.min.css"
+  ]
 }

@@ -1,0 +1,133 @@
+<form>
+  <div id="vtta-tokens" class="vtta ui">
+    <div class="row main">
+      <div class="canvas">
+        <i class="loading fas fa-cog rotating"></i>
+      </div>
+      <div class="controls">
+        <div class="activeLayer disabled">
+          <div class="blendmode">
+            <span class="title">
+              Blend
+            </span>
+            <select disabled name="blendmode"></select>
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation"
+            >
+              <i
+                class="fas fa-question-circle"
+                style="margin-left: 0.25rem; color: rgb(141, 141, 243)"
+              ></i>
+            </a>
+          </div>
+          <div class="alpha">
+            <span class="title">
+              Opacity
+            </span>
+            <input
+              disabled
+              name="alpha"
+              type="range"
+              min="0"
+              max="100"
+              step="2"
+              value="100"
+              style="width: 100px; margin: 0px 5px 0px 5px"
+            />
+          </div>
+        </div>
+        <section class="layers"></section>
+        <section class="layerManagement">
+          <div class="addLayer buttons">
+            <button
+              data-type="action"
+              data-action="add-layer-profile"
+              class="button"
+              title="Add the actor profile image"
+            >
+              <i class="fa fa-user"></i>
+            </button>
+            <button
+              data-type="action"
+              data-action="open-modal"
+              data-target="add-layer-local"
+              class="button"
+              title="Add an image from your local driver"
+            >
+              <i class="fa fa-hdd"></i>
+            </button>
+            <button
+              data-type="action"
+              data-action="open-modal"
+              data-target="add-layer-remote"
+              class="button"
+              title="Add an image from an URL"
+            >
+              <i class="fa fa-globe"></i>
+            </button>
+            <button
+              data-type="action"
+              data-action="add-layer-fvtt"
+              class="button"
+              title="Add an image from your FVTT server"
+            >
+              <i class="fa fa-dice-d20"></i>
+            </button>
+            <input
+              type="color"
+              tabindex="-1"
+              style="opacity: 0; visibility: hidden; position: absolute"
+            />
+            <button
+              data-type="action"
+              data-action="add-layer-tint"
+              class="button"
+              title="Add a color layer"
+            >
+              <i class="fas fa-fill-drip"></i>
+            </button>
+            <div class="seperator"></div>
+            <button
+              data-type="action"
+              data-action="download"
+              class="button"
+              title="Download composition as a file"
+            >
+              <i class="fas fa-download"></i>
+            </button>
+          </div>
+        </section>
+        <section class="tokenImages">
+          <div class="title">
+            Existing token(s):
+          </div>
+          <div class="content"></div>
+        </section>
+        <section class="tokenFilename">
+          <div class="title">
+            Token will be saved as:
+          </div>
+          <div class="content">
+            <input type="hidden" name="targetTokenFilePath" />
+            <input type="hidden" name="targetTokenPath" />
+            <div class="directory">
+              [data] uploads
+            </div>
+            <div class="filename">
+              <input type="text" name="targetTokenFilename" />
+            </div>
+          </div>
+        </section>
+        <footer class="buttons">
+          <button name="OK">
+            Save
+          </button>
+          <button name="CLOSE">
+            Close
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div class="row footer"></div>
+  </div>
+</form>

@@ -86,6 +86,7 @@
       <div data-type="action" data-action="remove">
         <i class="fa fa-trash-alt icon" style="color: rgb(251 117 0);"></i>
       </div>
+      {{#or layer.canMoveUp layer.canMoveDown}}
       <div style="display: flex; flex-direction:column">
         <div {{#if layer.canMoveUp}}data-type="action" data-action="moveUp" {{/if}}>
           <i class="fa fa-angle-up" {{#unless layer.canMoveUp}}style="color: gray;" {{/unless}}></i>
@@ -94,6 +95,7 @@
           <i class="fa fa-angle-down" {{#unless layer.canMoveDown}}style="color: gray;" {{/unless}}></i>
         </div>
       </div>
+      {{/or}}
     </div>
   </div>
   {{/inline}}
@@ -102,6 +104,15 @@
   {{#*inline "layersPartial" }}
   <div class="pane layers">
     {{#each layers }}
+    {{> layerPartial layer=this }}
+    {{/each}}
+  </div>
+  {{/inline}}
+
+  <!-- MASKS -->
+  {{#*inline "masksPartial" }}
+  <div class="pane masks">
+    {{#each masks }}
     {{> layerPartial layer=this }}
     {{/each}}
   </div>
@@ -125,6 +136,13 @@
 
       <!-- Footer: Layer create etc.-->
       {{> footerPartial }}
+
+      <!-- Masks -->
+      {{> masksPartial }}
+    </section>
+
+    <section name="masks" class="masks">
+      
     </section>
 
   </div>

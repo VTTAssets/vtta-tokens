@@ -1,5 +1,4 @@
 import config from "../../config/index.js";
-//import Layer from "../../modules/_TokenEditor/Layer/index.js";
 import logger from "../../util/logger.js";
 
 const addImages = ($form, images, newImages) => {

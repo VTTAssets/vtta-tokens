@@ -27,51 +27,20 @@ export default function () {
 
           const editor = new App({}, app.entity);
           const headerButton = $(
-            `<a class="vtta header-button"><img src="modules/vtta-core/public/img/vtta-logo.svg">Edit Token</a>`
+            `<div class="vtta button"><img src="modules/vtta-core/public/img/vtta-logo.svg">Edit Token</div>`
           );
-          // const headerButton = $(
-          //   `<a class="vtta header-button"><img src="modules/vtta-core/public/img/vtta-logo.svg">VTTA Tokens</a>`
-          // );
+
           $(headerButton).insertBefore(
             $(html).find("header.window-header a").first()
           );
 
-          // const profileButton = $(
-          //   `<div class="vtta ui profile-button" style="top: ${
-          //     $(image).position().top + "px"
-          //   }; left: ${$(image).position().left + "px"}; width: ${
-          //     $(image).width() + "px"
-          //   }; height: ${
-          //     $(image).height() + "px"
-          //   }"><button class="vtta ui button small"><i class="fas fa-user-circle"></i> Edit Token</button></div>`
-          // );
-          // const button = $(profileButton).find("button");
-
-          // $(image).after(profileButton);
-
-          // $(button).hide();
-
-          // $(profileButton).on("mouseenter", (event) => {
-          //   $(button).fadeIn(100);
-          // });
-          // $(profileButton).on("mouseleave", (event) => {
-          //   $(button).fadeOut(100);
-          // });
-
           $(headerButton).on("click", (event) => {
-            // $(profileButton).on("click", (event) => {
-            // if (
-            //   event.target.tagName === "BUTTON" ||
-            //   event.target.tagName === "I"
-            // ) {
+            event.preventDefault();
             if (editor.rendered) {
               editor.bringToTop();
             } else {
               editor.render(true);
             }
-            // } else {
-            //   $(image).click();
-            // }
           });
         });
     });

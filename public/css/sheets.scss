@@ -1,6 +1,6 @@
 @use '../../../vtta-core/public/css/colors.scss' as *;
 
-header.window-header a.vtta.header-button {
+header.window-header div.vtta.button {
   display: flex;
   align-items: center;
 
@@ -9,6 +9,7 @@ header.window-header a.vtta.header-button {
 
   font-family: "Signika", sans-serif;
   color: #f0f0e0;
+  cursor: pointer;
 
   img {
     padding-right: 2px;

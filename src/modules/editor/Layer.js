@@ -332,12 +332,16 @@ class Layer {
       { r: 0, g: 0, b: 0 }
     );
 
-    return new Color(
-      Math.round(sum.r / colors.length),
-      Math.round(sum.g / colors.length),
-      Math.round(sum.b / colors.length),
-      255
-    );
+    if (colors.length > 0) {
+      return new Color(
+        Math.round(sum.r / colors.length),
+        Math.round(sum.g / colors.length),
+        Math.round(sum.b / colors.length),
+        255
+      );
+    } else {
+      return new Color(0, 0, 0, 255);
+    }
   }
 
   rotate(CHANGE) {

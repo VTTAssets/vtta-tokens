@@ -2,12 +2,39 @@ import config from "./index.js";
 
 const checkCoreAvailability = () => {
   console.log(`Querying for vtta-core`);
+
+  let responseReceived = false;
+
   return new Promise((resolve, reject) => {
+    const availabilityQueryHandler = (event) => {
+      responseReceived = true;
+
+      // remove self from the event listeners
+      window.removeEventListener(
+        config.messaging.core.response,
+        availabilityQueryHandler
+      );
+
+      console.info(`vtta-core v${event.detail.version} found.`);
+      // resolve with the core version number
+      resolve({
+        version: event.detail.version,
+      });
+    };
+
+    // add the event listener to the window-object
+    window.addEventListener(
+      config.messaging.core.response,
+      availabilityQueryHandler
+    );
+
     // query only so many times as configured
     let coreAvailabilityTries = 0;
 
     // setting up the interval
     const coreQueryInterval = setInterval(() => {
+      if (responseReceived) return;
+
       coreAvailabilityTries++;
       console.info(
         `Querying for vtta-core (${coreAvailabilityTries} attempt)...`
@@ -20,38 +47,9 @@ const checkCoreAvailability = () => {
         reject();
       }
 
-      const availabilityQueryHandler = (event) => {
-        // remove self from the event listeners
-        window.removeEventListener(
-          config.messaging.core.response,
-          availabilityQueryHandler
-        );
-        // stop the interval
-        clearInterval(coreQueryInterval);
-
-        console.info(`vtta-core v${event.detail.version} found.`);
-        // resolve with the core version number
-        resolve({
-          version: event.detail.version,
-        });
-      };
-
-      // add the event listener to the window-object
-      window.addEventListener(
-        config.messaging.core.response,
-        availabilityQueryHandler
-      );
-
       // dispatch the query event
+      console.log("Dispatching event...");
       window.dispatchEvent(new CustomEvent(config.messaging.core.query));
-
-      // do not wait forever for a reply, run into a timeout
-      setTimeout(() => {
-        window.removeEventListener(
-          config.messaging.core.response,
-          availabilityQueryHandler
-        );
-      }, config.messaging.core.timeout);
 
       // and repeat that for that given timeout
     }, config.messaging.core.timeout * 5);

@@ -1,7 +1,7 @@
 /**
  * Colors
  */
-header.window-header a.vtta.header-button {
+header.window-header div.vtta.button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -14,8 +14,9 @@ header.window-header a.vtta.header-button {
   margin: 0 0 0 8px;
   font-family: "Signika", sans-serif;
   color: #f0f0e0;
+  cursor: pointer;
 }
-header.window-header a.vtta.header-button img {
+header.window-header div.vtta.button img {
   padding-right: 2px;
   height: 20px;
   border: none;

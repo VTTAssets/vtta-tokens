@@ -16,7 +16,7 @@ export default function () {
       // Default Frame for NPCs
       key: "defaultNPCFrame",
       type: window.vtta.settings.ImageFilePicker.ImageFile,
-      default: "",
+      default: "[data] modules/vtta-tokens/public/img/default-frame-npc.png",
       scope: "world",
       config: false,
       public: true,
@@ -25,7 +25,7 @@ export default function () {
       // Default Frame for PCs
       key: "defaultPCFrame",
       type: window.vtta.settings.ImageFilePicker.ImageFile,
-      default: "",
+      default: "[data] modules/vtta-tokens/public/img/default-frame-pc.png",
       scope: "world",
       config: false,
       public: true,

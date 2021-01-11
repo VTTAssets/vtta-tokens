@@ -450,37 +450,37 @@ class UI {
 
     if (isDefaultTokenImage) {
       baseTokenFilename = generateDefaultPath();
-    }
+    } else {
+      // if the actor profile image is the same as the actor token image, then it's using Foundry's failsave
+      // to actually be able to save the token, we need to adjust this value
+      if (baseTokenFilename === this.actor.data.img) {
+        baseTokenFilename = replaceExtension(
+          appendSuffix(this.actor.data.img),
+          "png"
+        );
+      }
 
-    // if the actor profile image is the same as the actor token image, then it's using Foundry's failsave
-    // to actually be able to save the token, we need to adjust this value
-    if (baseTokenFilename === this.actor.data.img) {
-      baseTokenFilename = replaceExtension(
-        appendSuffix(this.actor.data.img),
-        "png"
-      );
-    }
-
-    let options = DirectoryPicker.optionsFromURL(baseTokenFilename);
-    switch (options.activeSource) {
-      case "data":
-        // check if the path is set to the root, if that is true redirect to the default path
-        if (isInsideRootDirectory(options.current)) {
-          baseTokenFilename = generateDefaultPath();
-        } else {
+      let options = DirectoryPicker.optionsFromURL(baseTokenFilename);
+      switch (options.activeSource) {
+        case "data":
+          // check if the path is set to the root, if that is true redirect to the default path
+          if (isInsideRootDirectory(options.current)) {
+            baseTokenFilename = generateDefaultPath();
+          } else {
+            baseTokenFilename = DirectoryPicker.descriptorFromURL(
+              baseTokenFilename
+            );
+          }
+          break;
+        case "s3":
           baseTokenFilename = DirectoryPicker.descriptorFromURL(
             baseTokenFilename
           );
-        }
-        break;
-      case "s3":
-        baseTokenFilename = DirectoryPicker.descriptorFromURL(
-          baseTokenFilename
-        );
-        break;
-      case null:
-        baseTokenFilename = generateDefaultPath();
-        break;
+          break;
+        case null:
+          baseTokenFilename = generateDefaultPath();
+          break;
+      }
     }
 
     console.log("Base Token Filename: " + baseTokenFilename);

@@ -3,7 +3,7 @@
   "title": "VTTA Tokens",
   "description": "A powerful token editor",
   "author": "Sebastian Will <vttassets@gmail.com>",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "esmodules": ["src/index.js"],

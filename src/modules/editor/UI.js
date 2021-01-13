@@ -267,7 +267,11 @@ class UI {
           } else {
             // update the actor with the (perhaps new) token path
             if (result.path && result.path !== this.actor.data.token.img) {
-              await this.actor.update({ "token.img": result.path });
+              let tokenUrl = result.path.replace(/\?[t=]*\d+$/, "");
+              tokenUrl = `${tokenUrl}?${+new Date()}`;
+              await this.actor.update({
+                "token.img": tokenUrl,
+              });
             }
           }
         }
@@ -417,11 +421,10 @@ class UI {
 
     const DEFAULT_TOKEN = "icons/svg/mystery-man.svg";
     const tokenImages = await loadExistingTokens();
-    let targetTokenFilename = this.actor.data.token.img;
+    let baseTokenFilename = this.actor.data.token.img.replace(/\?\d+$/, "");
 
     const isWildCardToken =
-      this.actor.data.token.randomImg &&
-      targetTokenFilename.indexOf("*") !== -1;
+      this.actor.data.token.randomImg && baseTokenFilename.indexOf("*") !== -1;
 
     const isDefaultTokenImage =
       this.actor.data.token.img === "" ||
@@ -433,7 +436,10 @@ class UI {
       this.actor.data.img === null ||
       this.actor.data.img === DEFAULT_TOKEN;
 
-    let baseTokenFilename = this.actor.data.token.img;
+    //let baseTokenFilename = this.actor.data.token.img;
+
+    // remove any excess
+    //baseTokenFilename = baseTokenFilename.replace(/\?t=\d+$/, "");
 
     if (isDefaultTokenImage) {
       baseTokenFilename = generateDefaultPath();
@@ -497,7 +503,7 @@ class UI {
       .val(baseTokenFilename)
       .trigger("change");
 
-    return targetTokenFilename;
+    return baseTokenFilename;
   }
 
   async loadActor(actor) {

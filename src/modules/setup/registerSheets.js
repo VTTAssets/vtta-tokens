@@ -18,8 +18,12 @@ export default function () {
       logger.info(`Sheet ${sheetName} rendered. Registering Hook`);
 
       $(html).each(() => {
+        // const headerButton = $(
+        //   `<div class="vtta button"><img src="modules/vtta-core/public/img/vtta-logo.svg">Edit Token</div>`
+        // );
+
         const headerButton = $(
-          `<div class="vtta button"><img src="modules/vtta-core/public/img/vtta-logo.svg">Edit Token</div>`
+          `<a><i class="fas fa-paint-brush"></i></i>VTTA Tokens</a>`
         );
 
         const headerButtonExists = $(html).find(

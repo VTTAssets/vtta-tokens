@@ -81,7 +81,6 @@ class MaskEditor {
     // margin to the screen is MARGIN%
     const MARGIN = 10;
     const WIDTH = $(container).width();
-    console.log("WIDTH: " + WIDTH);
 
     this.canvas = document.createElement("canvas");
 
@@ -128,36 +127,11 @@ class MaskEditor {
     };
 
     container.append(this.canvas);
-
-    // console.log("Submitting data: ");
-    // console.log(data);
-    // fetch("http://localhost:3000/cv2f", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "image/png",
-    //     "Content-Type": "text/plain",
-    //   },
-    //   body: data,
-    // }).then((result) => {
-    //   console.log("Result from cv2f");
-    //   console.log(result);
-    //   const filename = "mask.png";
-    //   //FilePicker.upload(options.activeSource, options.current, file, { bucket: options.bucket });
-
-    //   const file = new File(result, filename, { type: data.type });
-    //   console.log(file);
-    //   // const result = await DirectoryPicker.uploadToPath(path, file);
-    // });
   }
 
   activateListeners() {
-    console.log(
-      "Client Size: " + this.canvas.clientWidth + "/" + this.canvas.clientHeight
-    );
     var rect = this.canvas.getBoundingClientRect();
-    console.log("rect: ", rect);
     this.ratio = rect.width / this.canvas.width;
-    console.log("Ratio: " + this.ratio);
 
     let isDrawing = false,
       lastPoint = null;
@@ -166,7 +140,7 @@ class MaskEditor {
       "wheel",
       (event) => {
         event.preventDefault();
-        if (event.wheelDelta > 0) {
+        if (event.wheelDelta < 0) {
           this.brushSize--;
           if (this.brushSize <= 2) this.brushSize = 2;
         } else {

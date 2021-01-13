@@ -259,7 +259,7 @@ class Editor {
         }
 
         const CHANGE =
-          e.deltaY < 0
+          e.deltaY > 0
             ? mouseScrollThreshold(eventTimeDelta)
             : -1 * mouseScrollThreshold(eventTimeDelta);
         mouseWheel(e.shiftKey, CHANGE);

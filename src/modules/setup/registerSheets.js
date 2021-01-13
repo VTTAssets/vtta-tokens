@@ -17,32 +17,31 @@ export default function () {
     Hooks.on("render" + sheetName, (app, html, data) => {
       logger.info(`Sheet ${sheetName} rendered. Registering Hook`);
 
-      $(html)
-        .find(
-          config.sheets.profileImageClasses.map((cls) => `img${cls}`).join(", ")
-        )
-        .each((index, image) => {
-          // // create a new editor for this actor
-          // const editorUI = new EditorUI({}, app.entity);
+      $(html).each(() => {
+        const headerButton = $(
+          `<div class="vtta button"><img src="modules/vtta-core/public/img/vtta-logo.svg">Edit Token</div>`
+        );
 
-          const editor = new App({}, app.entity);
-          const headerButton = $(
-            `<div class="vtta button"><img src="modules/vtta-core/public/img/vtta-logo.svg">Edit Token</div>`
-          );
+        const headerButtonExists = $(html).find(
+          "header.window-header div.vtta.button"
+        ).length;
+        if (headerButtonExists) return;
 
-          $(headerButton).insertBefore(
-            $(html).find("header.window-header a").first()
-          );
+        const editor = new App({}, app.entity);
 
-          $(headerButton).on("click", (event) => {
-            event.preventDefault();
-            if (editor.rendered) {
-              editor.bringToTop();
-            } else {
-              editor.render(true);
-            }
-          });
+        $(headerButton).insertBefore(
+          $(html).find("header.window-header a").first()
+        );
+
+        $(headerButton).on("click", (event) => {
+          event.preventDefault();
+          if (editor.rendered) {
+            editor.bringToTop();
+          } else {
+            editor.render(true);
+          }
         });
+      });
     });
   });
 }

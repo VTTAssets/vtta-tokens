@@ -541,7 +541,8 @@ class Layer {
         );
       } catch (error) {
         window.vtta.ui.Notification.show(
-          `<h2>Image load failed</h2><p>The image from <a href="${url}">this URL</a> could not be loaded onto the canvas.</p>
+          "Could not load image",
+          `<p>The image from <a href="${url}">this URL</a> could not be loaded onto the canvas.</p>
             <p>This is probably because it is located on a different server than your Foundry server/ your S3 storage. Upload it to a location you own and try again.</p>`,
           null
         );

@@ -5,6 +5,7 @@ import handleLocalFiles from "./handleLocalFiles.js";
 import handleRemoteFiles from "./handleRemoteFiles.js";
 import handleServerFiles from "./handleServerFiles.js";
 import logger from "../../util/logger.js";
+import DirectoryPicker from "../../../../vtta-core/src/modules/settings/DirectoryPicker.js";
 
 class UI {
   constructor(html) {
@@ -99,7 +100,6 @@ class UI {
       if (!this.activeLayer) return;
 
       const value = parseInt($(event.target).val()) / 100;
-      console.log("Setting alpha to " + value);
       const result = await this.editor.setLayerAlpha(this.activeLayer, value);
       this.displayData(result);
     };
@@ -109,9 +109,7 @@ class UI {
     const $blendmode = $(this.$activeLayer).find(`select[name="blendmode"]`);
     $blendmode.on("change", async (e) => {
       if (!this.activeLayer) return;
-      console.log($(e.target).data());
       const value = $(e.target).val();
-      console.log("Setting blendmode to " + value);
       const result = await this.editor.setLayerBlendmode(
         this.activeLayer,
         value
@@ -129,13 +127,10 @@ class UI {
         const data = $(event.currentTarget).data();
         if (!data.action) return;
 
-        console.log("ACtion: " + data.action);
-
         switch (data.action) {
           case "add-layer-tint":
             // done
             const color = await this.pickColor(this.html);
-            console.log("Color chosen: " + color);
             const tint = await this.editor.addTint(color);
             this.displayData(this.editor.getData());
             break;
@@ -191,7 +186,7 @@ class UI {
                       this.displayData(this.editor.getData());
                     })
                     .catch((error) => {
-                      console.log(error);
+                      logger.error(error);
                     });
 
                   break;
@@ -214,6 +209,9 @@ class UI {
         }
       });
 
+    /**
+     * Saving the image
+     */
     $(this.$ok).on("click", (event) => {
       if (this.actor.data.token.randomImg) event.preventDefault();
       this.editor.getBlob().then(async (data) => {
@@ -235,29 +233,32 @@ class UI {
             subdirectory = subdirectory + "/" + subdirectories.splice(0, 1)[0];
             try {
               await FilePicker.createDirectory("data", subdirectory);
-              console.log(`[data] ${subdirectory} created`);
+              logger.info(`[data] ${subdirectory} created`);
             } catch (error) {
               if (error.indexOf("EEXIST") === 0) {
-                console.log(`[data] ${subdirectory} already exists`);
+                logger.info(`[data] ${subdirectory} already exists`);
               }
             }
           }
         }
-
-        // this.$tokenFilename.find("input[name='targetTokenPath']").val();
-        // let filePath = this.$tokenFilename.val();
-        // const parts = filePath.split("/");
-        // const filename = parts.splice(parts.length - 1, 1)[0];
-        // filePath = parts.join("/");
 
         let file = new File([data], filename, { type: data.type });
         const result = await window.vtta.settings.DirectoryPicker.uploadToPath(
           path,
           file
         );
+
         if (result.status === "success" && result.message) {
-          console.log("Upload successful: ", result);
-          window.vtta.ui.Notification.show(result.message, 2000);
+          logger.info("Upload successful: ", result);
+
+          const path = window.vtta.settings.DirectoryPicker.descriptorFromURL(
+            result.path
+          );
+          window.vtta.ui.Notification.show(
+            "Token created successfully",
+            `<p>Image stored at <strong>${path}</strong></p>`,
+            2000
+          );
 
           delete this.actor._tokenImages;
 
@@ -273,9 +274,9 @@ class UI {
       });
     });
 
-    $(this.$close).on("click", (event) => {
-      this.close();
-    });
+    // $(this.$close).on("click", (event) => {
+    //   this.close();
+    // });
   }
 
   pickColor(html) {
@@ -286,23 +287,6 @@ class UI {
 
       $colorInput.on("change", (event) => {
         resolve($(event.currentTarget).val());
-      });
-
-      $colorInput.on("close", (event) => {
-        console.log("Color Picker closed");
-      });
-      $colorInput.on("hide", (event) => {
-        console.log("Color Picker hided");
-      });
-
-      $colorInput.blur((event) => {
-        console.log(event);
-        if ($colorInput.data("prevColor") == $colorInput.val()) {
-          console.log("cancelled");
-        } else {
-          console.log("changed");
-          //value changed
-        }
       });
     });
   }
@@ -316,7 +300,7 @@ class UI {
     let url = window.vtta.settings.ImageFilePicker.getUrl(
       DEFAULT_FRAMES[actor.data.type]
     );
-    console.log("Loading URL: ", url);
+    logger.info("Retrieving default frame from URL", url);
     return url;
   }
 
@@ -340,7 +324,10 @@ class UI {
       try {
         tokenImages = await this.actor.getTokenImages();
       } catch (error) {
-        console.log(error);
+        logger.error(
+          "Could not retrieve the token images from the actor",
+          error
+        );
         return tokenImages;
       }
       this.$tokenImages.find(".content").empty();
@@ -377,7 +364,7 @@ class UI {
     const generateNextWildcardTokenFilename = (tokenFilenames) => {
       if (this.actor.data.token.img.indexOf("*") === -1) {
         // wildcard is set, but no wildcard found, let's hope the user knows what he is doing.
-        return this.actor.data.token.img;
+        return DirectoryPicker.descriptorFromURL(this.actor.data.token.img);
       }
 
       // generate a wildcard token filename based on the wildcard
@@ -393,7 +380,7 @@ class UI {
         tokenFilenames.find((filename) => filename === generatedFilename) !==
         undefined
       );
-      return generatedFilename;
+      return DirectoryPicker.descriptorFromURL(generatedFilename);
     };
 
     const isInsideRootDirectory = (path) => {
@@ -483,7 +470,7 @@ class UI {
       }
     }
 
-    console.log("Base Token Filename: " + baseTokenFilename);
+    logger.info("Target token filename constructed", baseTokenFilename);
 
     /**
      In general, tokens will be saved along-side the profile image with a .token suffix
@@ -504,124 +491,7 @@ class UI {
     if (isWildCardToken) {
       baseTokenFilename = generateNextWildcardTokenFilename(tokenImages);
     }
-    // if (isWildCardToken) {
-    //   // find the next suitable token filename for this wildcard token sequence
-    //   targetTokenFilename = generateNextWildcardTokenFilename(tokenImages);
-    //   // targetTokenFilename could be the DEFAULT_TOKEN, too
-    // } else {
-    //   // 1) existing token path, if not DEFAULT_TOKEN
-    //   // 2) next to profile img, if not DEFAULT_TOKEN
-    //   // 3) generated default from vtta-core + defaultPath
-    //   if (!isDefaultTokenImage) {
-    //     targetTokenFilename = this.actor.data.token.img;
-    //     // translate the generated URL
-    //     const details = DirectoryPicker.infer(targetTokenFilename);
-    //     if (
-    //       details.activeSource === null ||
-    //       (details.activeSource === "data" &&
-    //         details.current === this.actor.data.token.img)
-    //     ) {
-    //       targetTokenFilename =
-    //         game.settings.get("vtta-core", "actorImageDirectory") +
-    //         "/" +
-    //         generateDefaultPath() +
-    //         "/" +
-    //         this.actor.name.replace(/\s/g, "-") +
-    //         ".token.png";
-    //     } else {
-    //       targetTokenFilename = DirectoryPicker.format(details);
-    //     }
-    //   } else {
-    //     if (!isDefaultProfileImage) {
-    //       // make sure that the profile image is either located on the FVTT server (in data), or
-    //       const details = DirectoryPicker.infer(this.actor.data.img);
 
-    //       // make sure it's not a remote image (from any webserver in the internet !== s3/fvtt)
-    //       if (details.activeSource === null) {
-    //         targetTokenFilename =
-    //           game.settings.get("vtta-core", "actorImageDirectory") +
-    //           "/" +
-    //           generateDefaultPath() +
-    //           "/" +
-    //           this.actor.name.replace(/\s/g, "-") +
-    //           ".token.png";
-    //       } else {
-    //         // edge case: user upload to "[data] "
-    //         targetTokenFilename = this.actor.data.img;
-    //         // add .token suffix, rename file extension to png
-    //         const parts = targetTokenFilename.split(".");
-    //         parts[parts.length - 1] = "token.png";
-    //         targetTokenFilename = parts.join(".");
-
-    //         // translate the generated URL
-    //         const details = DirectoryPicker.infer(targetTokenFilename);
-
-    //         targetTokenFilename = DirectoryPicker.format(details);
-    //       }
-    //     } else {
-    //       targetTokenFilename =
-    //         game.settings.get("vtta-core", "actorImageDirectory") +
-    //         "/" +
-    //         generateDefaultPath() +
-    //         "/" +
-    //         encodeURIComponent(this.actor.name.replace(/\s/g, "-")) +
-    //         ".token.png";
-    //     }
-    //   }
-
-    //   // if (isDefaultTokenImage) {
-    //   //   if (isDefaultProfileImage) {
-    //   //     const actorSpecificDefault = createActorSpecificDefaultPath(
-    //   //       this.actor
-    //   //     );
-    //   //     targetTokenFilename =
-    //   //       game.settings.get("vtta-core", "actorImageDirectory") +
-    //   //       "/" +
-    //   //       actorSpecificDefault +
-    //   //       ".png";
-    //   //   } else {
-    //   //     const details = DirectoryPicker.infer(actor.data.img);
-    //   //     if (details.activeSource !== null) {
-    //   //       const parts = details.current.split(".");
-    //   //       // remove the file extension
-    //   //       parts.splice(parts.length - 1, 1);
-    //   //       parts.push("token");
-    //   //       details.current = parts.join(".") + ".png";
-    //   //       targetTokenFilename = DirectoryPicker.format(details);
-    //   //     } else {
-    //   //       // get the default location again
-    //   //       const actorSpecificDefault = createActorSpecificDefaultPath(
-    //   //         this.actor
-    //   //       );
-    //   //       targetTokenFilename =
-    //   //         game.settings.get("vtta-core", "actorImageDirectory") +
-    //   //         "/" +
-    //   //         actorSpecificDefault +
-    //   //         ".png";
-    //   //     }
-    //   //   }
-    //   // } else {
-    //   //   const details = DirectoryPicker.infer(actor.data.token.img);
-    //   //   if (details.activeSource !== null) {
-    //   //     const parts = details.current.split(".");
-    //   //     // remove the file extension
-    //   //     parts.splice(parts.length - 1, 1);
-    //   //     parts.push("token");
-    //   //     details.current = parts.join(".") + ".png";
-    //   //     targetTokenFilename = DirectoryPicker.format(details);
-    //   //   }
-    //   // }
-    // }
-
-    // const filePickerOptions = window.vtta.settings.DirectoryPicker.parse(
-    //   targetTokenFilename
-    // );
-    // console.log(filePickerOptions);
-
-    // // update the UI
-    // const targetTokenFilePath = window.vtta.settings.DirectoryPicker.format(
-    //   filePickerOptions
-    // );
     this.$tokenFilename
       .find("input[name='targetTokenFilePath']")
       .val(baseTokenFilename)
@@ -946,29 +816,11 @@ class UI {
           $(control)
             .find("div.thumbnail.canvas")
             .on("click", async (e) => {
-              console.log("Choose color");
               const pickColor = (layer) => {
                 return new Promise((resolve, reject) => {
                   const $colorInput = $("#colorpicker-" + layer.id);
                   $colorInput.data("prevColor", $colorInput.val());
                   $colorInput.click();
-
-                  $colorInput.on("close", (event) => {
-                    console.log("Color Picker closed");
-                  });
-                  $colorInput.on("hide", (event) => {
-                    console.log("Color Picker hided");
-                  });
-
-                  $colorInput.blur((event) => {
-                    console.log(event);
-                    if ($colorInput.data("prevColor") == $colorInput.val()) {
-                      console.log("cancelled");
-                    } else {
-                      console.log("changed");
-                      //value changed
-                    }
-                  });
 
                   $colorInput.on("change", (event) => {
                     resolve($(event.currentTarget).val());
@@ -995,7 +847,7 @@ class UI {
         .click(async (e) => {
           let isChanged = false;
           const data = $(e.currentTarget).data();
-          console.log(data.action);
+          logger.debug("Action choosen: " + data.action);
           switch (data.action) {
             case "visibility":
               await this.editor.toggleLayerVisibility(data.target);
@@ -1019,7 +871,6 @@ class UI {
               break;
             case "clone":
               const result = await this.editor.cloneLayer(data.target);
-              console.log(result);
               isChanged = true;
               break;
             case "reset":

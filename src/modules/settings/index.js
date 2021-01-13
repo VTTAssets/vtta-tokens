@@ -46,7 +46,7 @@ export default function () {
 
   // register all settings internally
   settings.forEach((setting, index) => {
-    logger.debug(`Registering setting`, setting.name, setting);
+    logger.debug(`Registering setting`, setting.key, setting);
     setting.order = index;
     game.settings.register(config.module.name, setting.key, setting);
   });

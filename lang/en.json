@@ -1,6 +1,6 @@
 {
   "ERROR.CoreMissing": "Module <strong style='color: orange'>vtta-core</strong> is missing and required for <strong style='color: orange'>VTTA Tokens</strong> to function. Please install and enable it to continue.",
-  "ERROR.CoreDisabled": "Module <strong style='color: orange'>vtta-core</strong> is installed, but disabled. It is required for <strong style='color: orange'>VTTA Tokens</strong> to function. Please go to the module configuration and enable it to continue.",
+  "ERROR.CoreDisabled": "Module <strong style='color: orange'>vtta-core</strong> is installed, but disabled. You can find it in your module list labeled <strong style='color: orange'>Virtual Tabletop Assets (VTTA)</strong>, please enable it to use VTTA Tokens.",
   "SETTING.defaultNPCFrame.label": "Default border frame image for Non-player characters",
   "SETTING.defaultNPCFrame.hint": "Select an image to be loaded as a default frame",
   "SETTING.defaultPCFrame.label": "Default border frame image for Player characters",

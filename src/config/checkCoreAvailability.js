@@ -1,7 +1,17 @@
 import config from "./index.js";
 
+const log = (message, data) => {
+  const DEBUG = true;
+  if (DEBUG) {
+    if (data) {
+      console.log(`[${config.module.name}] ${message}`, data);
+    } else {
+      console.log(`[${config.module.name}] ${message}`);
+    }
+  }
+};
 const checkCoreAvailability = () => {
-  console.log(`Querying for vtta-core`);
+  log(`Querying for vtta-core`);
 
   let responseReceived = false;
 
@@ -15,7 +25,7 @@ const checkCoreAvailability = () => {
         availabilityQueryHandler
       );
 
-      console.info(`vtta-core v${event.detail.version} found.`);
+      log(`vtta-core v${event.detail.version} found.`);
       // resolve with the core version number
       resolve({
         version: event.detail.version,
@@ -36,19 +46,17 @@ const checkCoreAvailability = () => {
       if (responseReceived) return;
 
       coreAvailabilityTries++;
-      console.info(
-        `Querying for vtta-core (${coreAvailabilityTries} attempt)...`
-      );
-
       // if we exceed the number of queries, we abort the setup
       if (coreAvailabilityTries > config.messaging.core.retries) {
         clearInterval(coreQueryInterval);
-        console.warn(`No answer from vtta-core, aborting start.`);
+        log(`No answer from vtta-core, aborting start.`);
         reject();
       }
 
       // dispatch the query event
-      console.log("Dispatching event...");
+      log(
+        `Querying for vtta-core (attempt ${coreAvailabilityTries}/${config.messaging.core.retries})...`
+      );
       window.dispatchEvent(new CustomEvent(config.messaging.core.query));
 
       // and repeat that for that given timeout

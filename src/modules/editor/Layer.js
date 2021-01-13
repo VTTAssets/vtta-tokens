@@ -62,9 +62,6 @@ class Layer {
     // the center is used for the rotation
     this.center = new Point(canvas.width / 2, canvas.height / 2);
 
-    // not sure if this is needed
-    //this.viewPort = new ViewPort(this.center, this.dimensions);
-
     // the current canvas
     this.canvas = canvas;
     this.mask = cloneCanvas(this.cache.mask);
@@ -234,26 +231,6 @@ class Layer {
 
         // react on keyboard events, too
         window.addEventListener("keyup", onKeyUp);
-
-        // $modal.on("click", (event) => {
-        //   // close the mask editor on a click outside of the canvas
-        //   if ($(event.target).attr("id") === "maskeditor") {
-        //     // resolve({
-        //     //   isChanged: maskEditor.isMaskedChanged,
-        //     //   mask: maskEditor.mask,
-        //     // });
-        //     $modal.remove();
-
-        //     if (maskEditor.isMaskChanged) {
-        //       this.cache.mask = maskEditor.mask;
-        //     }
-
-        //     resolve({
-        //       isChanged: maskEditor.isMaskedChanged,
-        //       mask: maskEditor.mask,
-        //     });
-        //   }
-        // });
 
         maskEditor.draw();
       });

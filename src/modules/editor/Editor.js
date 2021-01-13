@@ -693,6 +693,13 @@ class Editor {
   deleteLayer(layer) {
     const index = this.findLayerIndex(layer);
     if (index === -1) return;
+
+    // delete all references to the mask this layer provides first
+    const layersAffected = this.layers.filter(
+      (layer) => layer.content.foreignMaskId === this.layers[index].content.id
+    );
+    layersAffected.forEach((layer) => layer.content.removeForeignMask());
+
     this.layers.splice(index, 1);
     return this.draw();
   }

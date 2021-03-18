@@ -1,11 +1,8 @@
 import checkCoreAvailability from "./config/checkCoreAvailability.js";
 import setup from "./modules/setup.js";
+// import autoCreate from "./modules/autocreate/index.js";
 
 Hooks.once("ready", async () => {
-  // we are doing a delayed start in order to wait for vtta-core to register everything
-  // setTimeout(async () => {
-  CONFIG.debug.hooks = false;
-
   try {
     const coreVersionNumber = await checkCoreAvailability();
     await setup();
@@ -27,4 +24,6 @@ Hooks.once("ready", async () => {
       });
     }
   }
+
+  // window.addEventListener("vtta-ddb.create-token", autoCreate);
 });

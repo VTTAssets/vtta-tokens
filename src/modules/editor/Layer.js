@@ -329,8 +329,10 @@ class Layer {
   }
 
   zoom(CHANGE) {
+    const step =
+      Math.min(this.dimensions.width, this.dimensions.height) / 10000; // minimum change: 1%
     if (CHANGE !== 0) {
-      this.zoomFactor -= 0.01 * CHANGE;
+      this.zoomFactor -= step * CHANGE; // 0.01 * CHANGE;
     }
     return this.draw();
   }

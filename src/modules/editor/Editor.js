@@ -90,6 +90,8 @@ class Editor {
 
     this.draw();
     this.activateListeners();
+
+    this.numEventListeners = 0;
   }
 
   getBlob() {
@@ -284,38 +286,6 @@ class Editor {
   };
 
   async addImage(url, options = {}) {
-    // const img = new Image();
-    // switch (options.type) {
-    //   case Layer.TYPE_REMOTE_IMAGE:
-    //     img.crossOrigin = "Anonymous";
-    //     img.src = `https://i.vtta.io/dl/${encodeURIComponent(url)}`;
-    //     break;
-    //   case Layer.TYPE_SERVER_IMAGE:
-    //     if (url.match(/^http[s]?:\/\//)) {
-    //       // if it's a S3 path, then we do not prepend the location origin to it
-    //       const s3Endpoint =
-    //         game.data.files.s3 &&
-    //         game.data.files.s3 &&
-    //         game.data.files.s3.endpoint &&
-    //         game.data.files.s3.endpoint.href
-    //           ? game.data.files.s3.endpoint.href
-    //           : "";
-
-    //       if (s3Endpoint !== "" && url.indexOf(s3Endpoint) === 0) {
-    //         // it's an S3 image
-    //         img.crossOrigin = "Anonymous";
-    //         img.src = url;
-    //       } else {
-    //         // its a remote image
-    //         options.type = Layer.TYPE_REMOTE_IMAGE;
-    //         img.crossOrigin = "Anonymous";
-    //         img.src = `https://i.vtta.io/dl/${encodeURIComponent(url)}`;
-    //       }
-    //     } else {
-    //       img.src = `${window.location.origin}/${url}`;
-    //     }
-    //     break;
-    // }
     try {
       const layer = await Layer.fromImg(this, url, options); // img, options);
       return this.addLayer(layer, options);
@@ -333,11 +303,6 @@ class Editor {
     });
 
     return this.addImage(url, options);
-    // img.crossOrigin = "Anonymous";
-    // img.src = `https://i.vtta.io/dl/${encodeURIComponent(url)}`;
-    // const layer = await Layer.fromImg(img, options);
-
-    // return this.addLayer(layer, options);
   }
 
   async addServerImage(url, options = {}) {
@@ -346,10 +311,6 @@ class Editor {
       name: Editor.extractFilenameFromUrl(url),
     });
     return this.addImage(url, options);
-    // const layer = await Layer.fromImg(img, options);
-    // img.src = url;
-
-    // return this.addLayer(layer, options);
   }
 
   /**
@@ -506,31 +467,6 @@ class Editor {
     this.layers[swapIndex] = this.layers[index];
     this.layers[index] = temp;
     return this.draw();
-    //return Promise.resolve(true);
-
-    // const index = this.findLayerIndex(layer);
-    // if (index === -1) return;
-
-    // let swapIndex = null;
-    // if (DIRECTION === Editor.DIRECTION_UP) {
-    //   // the top-most layer cannot move up
-    //   if (index === this.layers.length - 1) return;
-    //   swapIndex = index + 1;
-    // }
-
-    // if (DIRECTION === Editor.DIRECTION_DOWN) {
-    //   // the bottom layer cannot move down
-    //   if (index === 0) return;
-    //   swapIndex = index - 1;
-    // }
-
-    // if (swapIndex !== null) {
-    //   const temp = this.layers[swapIndex];
-    //   this.layers[swapIndex] = this.layers[index];
-    //   this.layers[index] = temp;
-    //   return this.draw();
-    // }
-    // return Promise.resolve(true);
   }
 
   /**
@@ -565,22 +501,6 @@ class Editor {
   /**
    * Lock
    */
-  // lockLayer(layer) {
-  //   const index = this.findLayerIndex(layer);
-  //   if (index === -1) return;
-
-  //   this.layers[index].options.isLocked = false;
-  //   this.isChanged = true;
-  // }
-
-  // unlockLayer(layer) {
-  //   const index = this.findLayerIndex(layer);
-  //   if (index === -1) return;
-
-  //   this.layers[index].options.isLocked = false;
-  //   this.isChanged = true;
-  // }
-
   toggleLayerLock(layer) {
     const index = this.findLayerIndex(layer);
     if (index === -1) return;
@@ -679,7 +599,6 @@ class Editor {
   /**
    * Clone
    */
-
   async cloneLayer(layer) {
     const index = this.findLayerIndex(layer);
     if (index === -1) return;
@@ -799,15 +718,13 @@ class Editor {
               this.canvas.height
             );
           });
+
+        this.dispatchEvent(new CustomEvent("DRAW_COMPLETED"));
+        resolve(this.getData());
       });
-      // // if nothing changed, we are sparing resources
-      // if (this.isChanged || force === true) {
-      //   // return to idle
-      //   this.isChanged = false;
-      // }
-      resolve(this.getData());
+
+      // was here: resolve(this.getData());
     });
-    //requestAnimationFrame(this.draw.bind(this));
   }
 
   getLayerOptions(layerId) {
@@ -832,6 +749,23 @@ class Editor {
     };
 
     return data;
+  }
+
+  /**
+   * Providing event listeners to get the results of the draw operation
+   */
+  addEventListener(event, callback) {
+    this.numEventListeners++;
+    this.canvas.addEventListener(event, callback);
+  }
+
+  removeEventListener(event, callback) {
+    this.numEventListeners--;
+    this.canvas.removeEventListener(event, callback);
+  }
+
+  dispatchEvent(customEvent) {
+    if (this.numEventListeners > 0) this.canvas.dispatchEvent(customEvent);
   }
 }
 

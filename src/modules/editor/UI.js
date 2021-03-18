@@ -537,24 +537,34 @@ class UI {
           avatar.content.borderColor.toString()
         );
         this.editor.toggleLayerLock(tint.content);
-        if (frame !== null)
+        if (frame !== null) {
+          console.log("Setting frame for tint");
+          console.log(frame.content);
           this.editor.setForeignMask(tint.content, frame.content);
+        }
       } catch (error) {
         logger.error("Could not apply default tint layer", error);
       }
     }
-    const data = this.editor.getData();
 
     this.editor.forceRedraw();
-    this.displayData(data);
-    this.$loading.addClass("done");
+    const finishSetup = () => {
+      this.editor.removeEventListener("DRAW_COMPLETED", finishSetup);
+      const data = this.editor.getData();
 
-    // debug
-    if (this.debug) {
-      $("body").append(tint.content.canvas);
-      $("body").append(tint.content.mask);
-      $("body").append(tint.content.foreignMask);
-    }
+      // await this.editor.draw();
+      this.displayData(data);
+      this.$loading.addClass("done");
+    };
+    this.editor.addEventListener("DRAW_COMPLETED", finishSetup);
+    setTimeout(() => {}, 100);
+
+    // // debug
+    // if (this.debug) {
+    //   $("body").append(tint.content.canvas);
+    //   $("body").append(tint.content.mask);
+    //   $("body").append(tint.content.foreignMask);
+    // }
   }
 
   async fakeInitialize() {
@@ -894,7 +904,7 @@ class UI {
           }
 
           if (isChanged) {
-            // this.delayedUpdate();
+            //this.delayedUpdate();
             const data = this.editor.getData();
             // this.editor.forceRedraw();
             this.displayData(data);

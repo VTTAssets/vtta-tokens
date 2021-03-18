@@ -20,6 +20,7 @@ export default function () {
       scope: "world",
       config: false,
       public: true,
+      section: "token",
     },
     {
       // Default Frame for PCs
@@ -29,6 +30,7 @@ export default function () {
       scope: "world",
       config: false,
       public: true,
+      section: "token",
     },
     {
       // Auto-generation of Tokens
@@ -41,6 +43,7 @@ export default function () {
       scope: "world",
       config: false,
       public: true,
+      section: "token",
     },
   ];
 

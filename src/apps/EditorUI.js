@@ -66,62 +66,7 @@ class EditorUI extends FormApplication {
       //this.editor.setLayerMask(profileLayer.id, 1);
     }
 
-    // // this is the first render of the editor
-    // // we will retrieve both the avatar profile image and the default token frame
-    // // and initialize the editor with that
-    // return new Promise(async (resolve, reject) => {
-    //   if (this.editor.layers.length === 0) {
-    //     const defaultLayers = [];
-
-    //     // try to load the default border frame and add that one, too
-    //     try {
-    //       let defaultFrameUrl =
-    //         this.actor.data.type === "character"
-    //           ? game.settings.get(config.module.name, "defaultPCFrame")
-    //           : game.settings.get(config.module.name, "defaultNPCFrame");
-    //       defaultFrameUrl = window.vtta.settings.ImageFilePicker.getUrl(
-    //         defaultFrameUrl
-    //       );
-    //       defaultLayers.push(Layer.fromUrl(this.tokenSize, defaultFrameUrl));
-    //     } catch (error) {
-    //       logger.error("Could not get setting for default frame", {
-    //         actorType: actor.data.type,
-    //       });
-    //     }
-
-    //     // Add the avatar image to the layers
-    //     defaultLayers.push(Layer.fromUrl(this.tokenSize, this.actor.data.img));
-
-    //     Promise.allSettled(defaultLayers)
-    //       .then((layers) => {
-    //         return layers
-    //           .filter((layer) => layer.status && layer.status === "fulfilled")
-    //           .map((layer) => layer.value);
-    //       })
-    //       .then((layers) => {
-    //         // all layers that were able to load are loaded
-    //         layers.forEach((layer, index) => {
-    //           this.editor.addLayer(layer);
-    //           if (index === 0) {
-    //             this.editor.appendMask(layer.id);
-    //           }
-    //         });
-
-    //         // // mask the first layer
-    //         // if (layers.length > 1) {
-    //         //   this.editor.setMaskLayer(layers[0].id);
-    //         // }
-    //         // construct the first data
-    //         resolve(this.editor.getData());
-    //       });
-
     return this.editor.getData();
-    //   } else {
-    //     const data = this.editor.getData();
-    //     console.log(data);
-    //     resolve(this.editor.getData());
-    //   }
-    // });
   }
 
   /**

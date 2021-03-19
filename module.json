@@ -3,7 +3,15 @@
   "title": "VTTA Tokens",
   "description": "A powerful token editor",
   "author": "Sebastian Will <vttassets@gmail.com>",
-  "version": "1.0.11",
+  "version": "1.0.12",
+  "dependencies": [
+    {
+      "name": "vtta-core",
+      "version": "1.1.5",
+      "manifest": "https://www.vtta.io/download/vtta-core/module.json",
+      "download": "https://www.vtta.io/download/vtta-core"
+    }
+  ],
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "esmodules": ["src/index.js"],
@@ -16,6 +24,7 @@
   ],
   "manifest": "http://localhost:5000/vtta-tokens/module.json",
   "download": "http://localhost:5000/vtta-tokens",
+
   "styles": [
     "public/css/default.css",
     "public/css/sheets.min.css",

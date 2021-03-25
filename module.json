@@ -3,11 +3,11 @@
   "title": "VTTA Tokens",
   "description": "A powerful token editor",
   "author": "Sebastian Will <vttassets@gmail.com>",
-  "version": "1.0.12",
+  "version": "1.1.0",
   "dependencies": [
     {
       "name": "vtta-core",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "manifest": "https://www.vtta.io/download/vtta-core/module.json",
       "download": "https://www.vtta.io/download/vtta-core"
     }

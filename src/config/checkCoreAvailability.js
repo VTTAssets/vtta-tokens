@@ -1,15 +1,16 @@
 import config from "./index.js";
 
-const log = (message, data) => {
+const log = (message) => {
   const DEBUG = true;
   if (DEBUG) {
-    if (data) {
-      console.log(`[${config.module.name}] ${message}`, data);
-    } else {
-      console.log(`[${config.module.name}] ${message}`);
-    }
+    console.log(
+      `%c[INIT] ${config.module.name} %c${message}`,
+      "font-weight: bold; background-color: lightblue; color: ##1f1f1f;",
+      "font-weight: bold; background-color: lightblue; color: ##1f1f1f;font-weight: normal"
+    );
   }
 };
+
 const checkCoreAvailability = () => {
   log(`Querying for vtta-core`);
 

@@ -389,7 +389,7 @@ class UI {
 
     const isInsideRootDirectory = (path) => {
       const parts = path.split("/").filter((subPath) => subPath.length > 0);
-      return parts.length === 1;
+      return parts.length === 0;
     };
 
     const generateDefaultPath = () => {
@@ -430,11 +430,6 @@ class UI {
       this.actor.data.token.img === "" ||
       this.actor.data.token.img === null ||
       this.actor.data.token.img === DEFAULT_TOKEN;
-
-    const isDefaultProfileImage =
-      this.actor.data.img === "" ||
-      this.actor.data.img === null ||
-      this.actor.data.img === DEFAULT_TOKEN;
 
     //let baseTokenFilename = this.actor.data.token.img;
 

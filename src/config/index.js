@@ -22,9 +22,9 @@ const config = {
   templates: {
     partials: {
       ADD_LAYER_LOCAL:
-        "modules/vtta-tokens/src/templates/partials/add-layer-local.handlebars",
+        "modules/vtta-tokens/src/templates/partials/add-layer-local.hbs",
       ADD_LAYER_REMOTE:
-        "modules/vtta-tokens/src/templates/partials/add-layer-remote.handlebars",
+        "modules/vtta-tokens/src/templates/partials/add-layer-remote.hbs",
     },
   },
   messaging: {

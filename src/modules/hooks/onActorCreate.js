@@ -126,23 +126,50 @@ const onActorCreate = async (entity, options, user) => {
     }
 
     try {
-      avatar = await editor.addServerImage(actor.img, {
-        fit: Layer.FIT_COVER,
-      });
+      if (
+        actor.flags.vtta.token &&
+        actor.flags.vtta.token.x &&
+        actor.flags.vtta.token.y &&
+        actor.flags.vtta.token.zoomFactor
+      ) {
+        logger.info(
+          "Received pre-defined token adjustments on actor",
+          actor.flags.vtta.token
+        );
+        avatar = await editor.addServerImage(actor.img, {
+          fit: Layer.FIT_PREDEFINED,
+          x: actor.flags.vtta.token.x,
+          y: actor.flags.vtta.token.y,
+          zoomFactor: actor.flags.vtta.token.zoomFactor,
+        });
+      } else {
+        logger.info(
+          "Creating token based on an educated guess for the area of interest",
+          actor.flags.vtta.token
+        );
+        avatar = await editor.addServerImage(actor.img, {
+          fit: Layer.FIT_COVER,
+        });
+      }
       if (frame !== null) editor.setForeignMask(avatar.content, frame.content);
     } catch (error) {
       logger.error("Could not add Layer: Actor profile image", error);
     }
 
-    if (avatar && avatar.content && avatar.content.borderColor) {
-      try {
-        const tint = await editor.addTint(
-          avatar.content.borderColor.toString()
-        );
+    // Background tint
+    try {
+      const backgroundColor =
+        actor.flags.vtta.token && actor.flags.vtta.token.bg
+          ? actor.flags.vtta.token.bg
+          : avatar && avatar.content && avatar.content.borderColor
+          ? avatar.content.borderColor.toString()
+          : null;
+      if (backgroundColor) {
+        const tint = await editor.addTint(backgroundColor);
         if (frame !== null) editor.setForeignMask(tint.content, frame.content);
-      } catch (error) {
-        logger.error("Could not apply default tint layer", error);
       }
+    } catch (error) {
+      logger.error("Could not apply default tint layer", error);
     }
 
     const saveToken = () => {
@@ -167,7 +194,11 @@ const onActorCreate = async (entity, options, user) => {
             },
           };
           logger.info("Updating actor", updateData);
-          await Actor.update(updateData);
+          if (window.vtta.postEightZero) {
+            await Actor.updateDocuments([updateData]);
+          } else {
+            await Actor.update(updateData);
+          }
 
           window.vtta.ui.Notification.show(
             `${actor.name}: Token generated successfully`,

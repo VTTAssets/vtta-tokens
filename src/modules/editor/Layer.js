@@ -16,6 +16,7 @@ class Layer {
 
   static FIT_CONTAIN = "CONTAIN";
   static FIT_COVER = "COVER";
+  static FIT_PREDEFINED = "PREDEFINED";
 
   static GRAVITY_NORTH = "N";
   static GRAVITY_NORTHEAST = "NE";
@@ -131,6 +132,15 @@ class Layer {
             this.canvas.height - this.dimensions.height * DEFAULT.zoomFactor
           ) / 2;
 
+        break;
+
+      case Layer.FIT_PREDEFINED:
+        if (this.options.zoomFactor)
+          DEFAULT.zoomFactor = this.options.zoomFactor;
+        if (this.options.x && this.options.y) {
+          DEFAULT.position.x = this.options.x;
+          DEFAULT.position.y = this.options.y;
+        }
         break;
     }
     return DEFAULT;
@@ -334,6 +344,7 @@ class Layer {
     if (CHANGE !== 0) {
       this.zoomFactor -= step * CHANGE; // 0.01 * CHANGE;
     }
+    console.log(this.zoomFactor);
     return this.draw();
   }
 
@@ -349,6 +360,8 @@ class Layer {
       this.position.x += delta.x;
       this.position.y += delta.y;
     }
+
+    console.log(this.position);
     return this.draw();
   }
 

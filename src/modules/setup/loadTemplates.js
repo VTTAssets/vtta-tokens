@@ -1,6 +1,5 @@
 import logger from "../../util/logger.js";
 import config from "../../config/index.js";
-// import EditorUI from "../../apps/EditorUI.js";
 
 export default function () {
   const partials = [];

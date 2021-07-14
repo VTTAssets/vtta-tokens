@@ -111,9 +111,10 @@ class MaskEditor {
         pixels.data[i + 1] * 0.7152 +
         pixels.data[i + 2] * 0.0722;
 
-      targetPixels.data[i] = targetPixels.data[i + 1] = targetPixels.data[
-        i + 2
-      ] = luma;
+      targetPixels.data[i] =
+        targetPixels.data[i + 1] =
+        targetPixels.data[i + 2] =
+          luma;
       targetPixels.data[i + 3] = pixels.data[i + 3];
     }
     this.greyscale = document.createElement("canvas");
@@ -180,7 +181,6 @@ class MaskEditor {
     });
     this.canvas.addEventListener("mousemove", (event) => {
       this.currentPoint = MaskEditor.getEventLocation(this.canvas, event);
-      // console.log(this.currentPoint);
       if (!isDrawing) return;
 
       const distanceBetween = (point1, point2) => {

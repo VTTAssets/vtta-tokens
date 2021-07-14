@@ -47,8 +47,7 @@ const loadImages = (newImages) => {
               resolve(image);
             };
             image.img.onerror = (error) => {
-              console.log("Image loading failed");
-              console.log(error);
+              logger.error("Could not load image", error);
             };
           };
           fileReader.readAsDataURL(image);

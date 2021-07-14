@@ -190,9 +190,7 @@ class Layer {
   }
 
   async editMask() {
-    // return new Promise((resolve, reject) => {
     // create a UI for editing the mask. It's pretty simple
-
     const showMaskEditor = () => {
       return new Promise((resolve, reject) => {
         const $modal = $(MaskEditor.html);
@@ -248,22 +246,6 @@ class Layer {
 
     await showMaskEditor();
     return this.draw();
-
-    //});
-
-    /**
-     * SENDING THE RESULT BACK TO THE FVTT SERVER
-     * /
-    const data = this.canvas.toDataURL("image/png");
-    fetch(this.canvas.toDataURL("image/png"))
-      .then((res) => res.blob())
-      .then((blob) => {
-        const file = new File([blob], "dot.png", blob);
-        console.log(file);
-      });
-     / **
-     * ^^^^ END SENDING
-     */
   }
 
   setMaskCanvas(canvas) {
@@ -344,7 +326,6 @@ class Layer {
     if (CHANGE !== 0) {
       this.zoomFactor -= step * CHANGE; // 0.01 * CHANGE;
     }
-    console.log(this.zoomFactor);
     return this.draw();
   }
 
@@ -361,7 +342,6 @@ class Layer {
       this.position.y += delta.y;
     }
 
-    console.log(this.position);
     return this.draw();
   }
 

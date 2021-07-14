@@ -50,9 +50,8 @@ class EditorUI extends FormApplication {
         this.actor.data.type === "character"
           ? game.settings.get(config.module.name, "defaultPCFrame")
           : game.settings.get(config.module.name, "defaultNPCFrame");
-      defaultFrameUrl = window.vtta.settings.ImageFilePicker.getUrl(
-        defaultFrameUrl
-      );
+      defaultFrameUrl =
+        window.vtta.settings.ImageFilePicker.getUrl(defaultFrameUrl);
 
       const frameLayer = await Layer.fromUrl(this.tokenSize, defaultFrameUrl);
       this.editor.addLayer(frameLayer);
@@ -170,7 +169,6 @@ class EditorUI extends FormApplication {
 
     if (event.shiftKey) {
       let degree = event.deltaY / 100;
-      console.log("Degree: " + degree);
       this.editor.rotate(degree);
     } else {
       var eventLocation = this.getEventLocation(this.preview, event);
@@ -181,16 +179,6 @@ class EditorUI extends FormApplication {
       } else {
         this.editor.zoomOut();
       }
-      // let factor = 1 - scaleDirection * 0.05;
-      // console.log("scalefactor: " + factor);
-
-      // // let dx = (eventLocation.x - this.activeLayer.position.x) * (factor - 1),
-      // //   dy = (eventLocation.y - this.activeLayer.position.y) * (factor - 1);
-
-      // this.editor.scale(factor);
-      // this.editor.translate(dx, dy);
-      // this.activeLayer.redraw();
-      // this.redraw();
     }
   }
 
@@ -235,7 +223,6 @@ class EditorUI extends FormApplication {
         title: game.i18n.localize("BLEND_MODE." + blendMode + ".description"),
       });
     }
-    console.log(blendModes);
     $('div.pane.activeLayer select[name="change-blendmode"]').append(
       blendModes
         .map(
@@ -249,7 +236,6 @@ class EditorUI extends FormApplication {
   pickColor(html) {
     return new Promise((resolve, reject) => {
       const $colorInput = $(html).find("input[type='color']").first();
-      console.log($colorInput);
       $colorInput.click();
 
       $colorInput.on("change", (event) => {
@@ -301,13 +287,11 @@ class EditorUI extends FormApplication {
           this.editor.removeLock(this.activeLayerId);
           $layer.addClass("active");
           const layer = this.editor.getLayer(this.activeLayerId);
-          console.log("Currently set blendmode: " + layer.blendMode);
-          console.log("Currently set opacity: " + layer.opacity);
 
           const option = $(blendMode).find(
             `option[value='${layer.blendMode}']`
           );
-          console.log(option);
+
           $(option).prop("selected", true);
           $(blendMode).attr("disabled", false);
           $(opacity).val(Math.round(layer.opacity * 100));
@@ -347,7 +331,7 @@ class EditorUI extends FormApplication {
       .click((event) => {
         const data = $(event.currentTarget).data();
         const layerId = $(event.currentTarget).parent().parent().data("id");
-        console.log("Layer " + layerId + " action clicked: ", data);
+
         switch (data.action) {
           case "remove":
             this.editor.removeLayer(layerId);
@@ -401,12 +385,10 @@ class EditorUI extends FormApplication {
         const data = $(event.currentTarget).data();
         if (!data.action) return;
 
-        console.log("ACtion: " + data.action);
-
         switch (data.action) {
           case "add-layer-tint":
             const color = await this.pickColor(html);
-            console.log("Color chosen: " + color);
+
             const layer = await Layer.fromColor(this.tokenSize, color);
             this.editor.addLayer(layer);
             this.render(true);

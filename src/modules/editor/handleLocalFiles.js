@@ -46,8 +46,7 @@ const loadImages = (newImages) => {
               resolve(image);
             };
             image.img.onerror = (error) => {
-              console.log("Image loading failed");
-              console.log(error);
+              logger.error("Image loading failed", error);
             };
           };
           fileReader.readAsDataURL(image);
@@ -102,11 +101,6 @@ const handleLocalFiles = ($form) => {
     // show the modal and await the response
     modal.show().then((response) => {
       if (response.button !== "OK") return;
-
-      console.log("Response: ");
-      console.log(response);
-      console.log(images);
-
       resolve(images);
     });
 

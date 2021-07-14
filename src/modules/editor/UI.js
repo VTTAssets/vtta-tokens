@@ -455,15 +455,13 @@ class UI {
           if (isInsideRootDirectory(options.current)) {
             baseTokenFilename = generateDefaultPath();
           } else {
-            baseTokenFilename = DirectoryPicker.descriptorFromURL(
-              baseTokenFilename
-            );
+            baseTokenFilename =
+              DirectoryPicker.descriptorFromURL(baseTokenFilename);
           }
           break;
         case "s3":
-          baseTokenFilename = DirectoryPicker.descriptorFromURL(
-            baseTokenFilename
-          );
+          baseTokenFilename =
+            DirectoryPicker.descriptorFromURL(baseTokenFilename);
           break;
         case null:
           baseTokenFilename = generateDefaultPath();
@@ -533,8 +531,6 @@ class UI {
         );
         this.editor.toggleLayerLock(tint.content);
         if (frame !== null) {
-          console.log("Setting frame for tint");
-          console.log(frame.content);
           this.editor.setForeignMask(tint.content, frame.content);
         }
       } catch (error) {
@@ -564,8 +560,7 @@ class UI {
 
   async fakeInitialize() {
     const actor = {
-      img:
-        "https://preview.redd.it/md29eaibwop21.jpg?width=640&crop=smart&auto=webp&s=1e040d65e0d9ff76245885408efb2b68a2d44efd",
+      img: "https://preview.redd.it/md29eaibwop21.jpg?width=640&crop=smart&auto=webp&s=1e040d65e0d9ff76245885408efb2b68a2d44efd",
       type: "pc",
     };
 
@@ -638,9 +633,7 @@ class UI {
     const createControl = (id, layer) => {
       const html = `   
         <div class="control" data-layer="${layer.id}" id="layer-${layer.id}" >
-        <input id="colorpicker-${
-          layer.id
-        }" type="color" value="${layer.color
+        <input id="colorpicker-${layer.id}" type="color" value="${layer.color
         .toString()
         .substr(
           0,

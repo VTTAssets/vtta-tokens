@@ -440,7 +440,6 @@ class Editor {
   }
 
   moveLayer(layer, DIRECTION, steps = 1) {
-    console.log(`Direction: ${DIRECTION} for ${steps}`);
     const index = this.findLayerIndex(layer);
     if (index === -1) return;
 
@@ -457,8 +456,6 @@ class Editor {
       swapIndex = index - steps;
       swapIndex = swapIndex < 0 ? 0 : swapIndex;
     }
-
-    console.log(`Swapping ${index} with ${swapIndex}`);
 
     // if there is no change, we do not do anything
     if (index === swapIndex) return this.draw();
@@ -492,8 +489,8 @@ class Editor {
     const index = this.findLayerIndex(layer);
     if (index === -1) return;
 
-    this.layers[index].options.isVisible = !this.layers[index].options
-      .isVisible;
+    this.layers[index].options.isVisible =
+      !this.layers[index].options.isVisible;
     return this.draw();
     this.isChanged = true;
   }

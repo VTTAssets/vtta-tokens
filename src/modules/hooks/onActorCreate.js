@@ -51,6 +51,10 @@ const upload = (url, path, filename, overwriteExisting = false) => {
 };
 
 const onActorCreate = async (entity, options, user) => {
+  if (
+    game.settings.get(config.module.name, "automaticTokenGeneration") === false
+  )
+    return;
   const actor = entity.data;
   if (
     actor.type === "npc" &&

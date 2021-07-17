@@ -34,6 +34,16 @@ export default function () {
     },
     {
       // Auto-generation of Tokens
+      key: "automaticTokenGeneration",
+      type: Boolean,
+      default: true,
+      scope: "world",
+      config: false,
+      public: true,
+      section: "token",
+    },
+    {
+      // Auto-generation of Tokens
       key: "tokenSize",
       type: Number,
       min: 100,

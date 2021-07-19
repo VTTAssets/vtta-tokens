@@ -5,7 +5,6 @@ import handleLocalFiles from "./handleLocalFiles.js";
 import handleRemoteFiles from "./handleRemoteFiles.js";
 import handleServerFiles from "./handleServerFiles.js";
 import logger from "../../util/logger.js";
-import DirectoryPicker from "../../../../vtta-core/src/modules/settings/DirectoryPicker.js";
 
 class UI {
   constructor(html) {

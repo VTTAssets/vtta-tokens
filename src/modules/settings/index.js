@@ -42,16 +42,6 @@ export default function () {
       public: true,
       section: "token",
     },
-	{
-      // Auto-generation of Tokens
-      key: "forceDefaultPathOnVTTServer",
-      type: Boolean,
-      default: false,
-      scope: "world",
-      config: false,
-      public: true,
-      section: "token",
-    },
     {
       // Auto-generation of Tokens
       key: "tokenSize",
@@ -60,6 +50,16 @@ export default function () {
       max: 480,
       step: 20,
       default: 240,
+      scope: "world",
+      config: false,
+      public: true,
+      section: "token",
+    },
+    {
+      // Token image save location
+      key: "forceDefaultPathOnVTTServer",
+      type: Boolean,
+      default: false,
       scope: "world",
       config: false,
       public: true,

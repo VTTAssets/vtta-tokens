@@ -42,6 +42,16 @@ export default function () {
       public: true,
       section: "token",
     },
+	{
+      // Auto-generation of Tokens
+      key: "forceDefaultPathOnVTTServer",
+      type: Boolean,
+      default: false,
+      scope: "world",
+      config: false,
+      public: true,
+      section: "token",
+    },
     {
       // Auto-generation of Tokens
       key: "tokenSize",

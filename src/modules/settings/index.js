@@ -55,6 +55,16 @@ export default function () {
       public: true,
       section: "token",
     },
+    {
+      // Token image save location
+      key: "forceDefaultPathOnVTTServer",
+      type: Boolean,
+      default: false,
+      scope: "world",
+      config: false,
+      public: true,
+      section: "token",
+    },
   ];
 
   // register all settings internally

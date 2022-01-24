@@ -451,7 +451,8 @@ class UI {
       switch (options.activeSource) {
         case "data":
           // check if the path is set to the root, if that is true redirect to the default path
-          if (isInsideRootDirectory(options.current)) {
+          // also redirect to default path if user has requested via config
+          if (isInsideRootDirectory(options.current) || game.settings.get(config.module.name, "forceDefaultPathOnVTTServer")) {
             baseTokenFilename = generateDefaultPath();
           } else {
             baseTokenFilename =
